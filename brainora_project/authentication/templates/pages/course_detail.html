@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ course.code }} - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses' %}">Courses</a></li>
+            <li class="breadcrumb-item active">{{ course.code }}</li>
+        </ol>
+    </nav>
+
+    <!-- Course Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-1">{{ course.code }}: {{ course.title }}</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ course.description }}</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <p>
+                                <strong><i class="fas fa-chalkboard-user"></i> Instructor:</strong><br>
+                                {{ course.instructor }}
+                            </p>
+                            <p>
+                                <strong><i class="fas fa-book"></i> Credits:</strong><br>
+                                {{ course.credits }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <strong><i class="fas fa-graduation-cap"></i> Semester:</strong><br>
+                                Semester {{ course.semester }}
+                            </p>
+                            <p>
+                                <strong><i class="fas fa-calendar"></i> Added:</strong><br>
+                                {{ course.created_at|date:"M d, Y" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 80px;">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Quick Stats</h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-item mb-3">
+                        <p class="text-muted mb-1">Total Papers</p>
+                        <h3 class="text-primary">{{ papers.count }}</h3>
+                    </div>
+                    <div class="stat-item">
+                        <p class="text-muted mb-1">Last Updated</p>
+                        <p>
+                            {% if papers %}
+                                {{ papers.0.updated_at|date:"M d, Y" }}
+                            {% else %}
+                                No papers yet
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Papers Section -->
+    <h3 class="mb-4"><i class="fas fa-file-pdf"></i> Previous Year Papers</h3>
+    
+    {% if papers %}
+    <div class="row">
+        {% for paper in papers %}
+        <div class="col-lg-6 mb-4">
+            <div class="card paper-card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title">{{ paper.title }}</h5>
+                            <span class="badge bg-primary">{{ paper.get_paper_type_display }}</span>
+                        </div>
+                        <span class="badge bg-secondary">{{ paper.year }}</span>
+                    </div>
+                    <p class="card-text text-muted">
+                        <i class="fas fa-user"></i> 
+                        Uploaded by: {{ paper.uploaded_by.username }}
+                    </p>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-calendar"></i> 
+                        {{ paper.created_at|date:"M d, Y" }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-top">
+                    <a href="{{ paper.file.url }}" class="btn btn-sm btn-primary" download>
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i> 
+        No previous year papers available for this course yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

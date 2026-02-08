@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Brainora{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-gradient py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-white mb-4">Welcome to Brainora</h1>
+                <p class="lead text-white mb-4">Your College Learning Hub - Upload, Download, and Share Academic Materials</p>
+                {% if not user.is_authenticated %}
+                <div class="button-group">
+                    <a href="{% url 'login' %}" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                </div>
+                {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-arrow-right"></i> Go to Dashboard
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <lottie-player src="https://lottie.host/fc77d40a-b4d2-4c09-81e4-f7f20f9c1cf6/SEGDmxSBHv.json" background="transparent" speed="1" style="width: 100%; height: 400px;" loop autoplay></lottie-player>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Why Choose Brainora?</h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-upload fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Easy Upload</h5>
+                        <p class="card-text">Easily upload documents, assignments, and study materials.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-download fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Quick Access</h5>
+                        <p class="card-text">Download resources shared by your classmates instantly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">Past Papers</h5>
+                        <p class="card-text">Access previous year exam papers and model solutions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bell fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Updates</h5>
+                        <p class="card-text">Stay informed with college news and announcements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Activities Section -->
+{% if user.is_authenticated %}
+<div class="activities-section py-5 bg-light">
+    <div class="container">
+        <h2 class="mb-5 fw-bold">Upcoming Events & Deadlines</h2>
+        <div class="row">
+            {% for activity in upcoming_activities %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card activity-card h-100 border-0 shadow-sm">
+                    {% if activity.image %}
+                    <img src="{{ activity.image.url }}" class="card-img-top" alt="{{ activity.title }}">
+                    {% else %}
+                    <div class="card-img-top bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-{{ activity.get_activity_type_display|slugify }} fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="activity-type-badge">
+                            <span class="badge bg-primary">{{ activity.get_activity_type_display }}</span>
+                        </div>
+                        <h5 class="card-title">{{ activity.title }}</h5>
+                        <p class="card-text text-muted small">{{ activity.description|truncatewords:15 }}</p>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-calendar-alt"></i> 
+                            {{ activity.date|date:"M d, Y H:i" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">No upcoming events at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'activities' %}" class="btn btn-primary btn-lg">
+                View All Activities <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Announcements Section -->
+<div class="announcements-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h2 class="mb-5 fw-bold text-center">Latest Announcements</h2>
+                {% for announcement in recent_announcements %}
+                <div class="card announcement-card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="card-title">{{ announcement.title }}</h5>
+                                <p class="card-text">{{ announcement.description|truncatewords:30 }}</p>
+                            </div>
+                            <small class="text-muted text-nowrap ms-3">{{ announcement.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">No announcements yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Stats Section -->
+<div class="stats-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h3 class="display-5 fw-bold">{{ total_courses }}</h3>
+                <p class="mb-0">Active Courses</p>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h3 class="display-5 fw-bold">500+</h3>
+                <p class="mb-0">Past Papers</p>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h3 class="display-5 fw-bold">1000+</h3>
+                <p class="mb-0">Students</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="display-5 fw-bold">24/7</h3>
+                <p class="mb-0">Available</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="cta-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <h2 class="mb-4 fw-bold">Ready to Get Started?</h2>
+                <p class="lead mb-4">Join thousands of students sharing and learning together on Brainora.</p>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i> Create Your Account Now
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+{% endblock %}

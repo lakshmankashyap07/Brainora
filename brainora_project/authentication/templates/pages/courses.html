@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Courses - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <h1 class="mb-2"><i class="fas fa-book"></i> Courses</h1>
+            <p class="text-muted">Semester {{ user_semester }} - {{ courses.count }} courses available</p>
+        </div>
+        <div class="col-lg-4">
+            <form method="GET" class="input-group">
+                <input type="text" class="form-control" name="search" placeholder="Search courses..." value="{{ search_query }}">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if courses %}
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-lg-6 mb-4">
+            <div class="card course-card h-100 border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-1">{{ course.code }}</h5>
+                            <p class="mb-0 small">{{ course.title }}</p>
+                        </div>
+                        <span class="badge bg-light text-primary">{{ course.credits }} Credits</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted">{{ course.description|truncatewords:20 }}</p>
+                    <div class="course-info mb-3">
+                        <p class="mb-2">
+                            <i class="fas fa-chalkboard-user"></i> 
+                            <strong>Instructor:</strong> {{ course.instructor }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-file-pdf"></i>
+                            <strong>Papers:</strong> {{ course.papers.count }}
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top">
+                    <a href="{% url 'course_detail' course.id %}" class="btn btn-primary btn-sm w-100">
+                        <i class="fas fa-arrow-right"></i> View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i> 
+        {% if search_query %}
+            No courses found matching "{{ search_query }}"
+        {% else %}
+            No courses available for your semester yet.
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

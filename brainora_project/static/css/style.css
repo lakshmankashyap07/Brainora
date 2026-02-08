@@ -1,0 +1,703 @@
+/* =====================================================
+   Brainora - Learning Platform Styles
+   ===================================================== */
+
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #7c3aed;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --light-color: #f3f4f6;
+    --dark-color: #111827;
+    --gray-color: #6b7280;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* =====================================================
+   Gradient Backgrounds
+   ===================================================== */
+
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+/* =====================================================
+   Navigation
+   ===================================================== */
+
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    transition: var(--transition);
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand i {
+    margin-right: 10px;
+}
+
+.nav-link {
+    transition: var(--transition);
+    padding: 8px 12px !important;
+    border-radius: 6px;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* =====================================================
+   Authentication Pages Styles
+   ===================================================== */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-wrapper {
+    width: 100%;
+    max-width: 450px;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+}
+
+.brainora-logo {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.brainora-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    letter-spacing: -0.5px;
+}
+
+.auth-form .form-control {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.auth-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+}
+
+.auth-form .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.form-label {
+    color: #374151;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    color: white;
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.invalid-feedback {
+    color: var(--danger-color);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.form-check-input {
+    border-color: #e5e7eb;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.auth-footer a {
+    transition: var(--transition);
+}
+
+.auth-footer a:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
+
+/* =====================================================
+   Card Styles
+   ===================================================== */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+    color: var(--dark-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    color: var(--gray-color);
+}
+
+.feature-card {
+    transition: var(--transition);
+    border-radius: 12px;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card i {
+    transition: var(--transition);
+}
+
+.feature-card:hover i {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.course-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.paper-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.activity-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.activity-type-badge {
+    margin-bottom: 10px;
+}
+
+.dashboard-action {
+    transition: var(--transition);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.dashboard-action:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.announcement-card {
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.announcement-card:hover {
+    background-color: #f9fafb;
+}
+
+/* =====================================================
+   Alert Messages
+   ===================================================== */
+
+.alert {
+    border: none;
+    border-radius: 8px;
+    padding: 15px 20px;
+    font-weight: 500;
+    animation: slideDown 0.4s ease-out;
+    border-left: 4px solid;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-left-color: var(--success-color);
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+    border-left-color: var(--danger-color);
+}
+
+.alert-warning {
+    background-color: #fef3c7;
+    color: #78350f;
+    border-left-color: var(--warning-color);
+}
+
+.alert-info {
+    background-color: #dbeafe;
+    color: #0c2d6b;
+    border-left-color: var(--info-color);
+}
+
+.btn-close {
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* =====================================================
+   Badge Styles
+   ===================================================== */
+
+.badge {
+    padding: 6px 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+}
+
+/* =====================================================
+   Button Styles
+   ===================================================== */
+
+.btn {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 16px;
+    transition: var(--transition);
+    letter-spacing: 0.5px;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1.05rem;
+}
+
+.btn i {
+    margin-right: 6px;
+}
+
+/* =====================================================
+   List Group Styles
+   ===================================================== */
+
+.list-group-item {
+    border: none;
+    transition: var(--transition);
+    background-color: #f9fafb;
+}
+
+.list-group-item:hover {
+    background-color: #f3f4f6;
+}
+
+.list-group-item-action:active {
+    background-color: #e5e7eb;
+}
+
+/* =====================================================
+   Utility Classes
+   ===================================================== */
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-muted {
+    color: #9ca3af !important;
+}
+
+a.text-muted {
+    color: #9ca3af !important;
+    transition: var(--transition);
+}
+
+a.text-muted:hover {
+    color: var(--primary-color) !important;
+}
+
+hr {
+    border-color: #e5e7eb;
+    margin: 1.5rem 0;
+    opacity: 0.8;
+}
+
+.bg-light {
+    background-color: #f9fafb !important;
+}
+
+.border-light {
+    border-color: #f3f4f6 !important;
+}
+
+/* =====================================================
+   Hover Effects
+   ===================================================== */
+
+.hover-lift {
+    transition: var(--transition);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.hover-shadow {
+    transition: box-shadow var(--transition);
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* =====================================================
+   Footer Styles
+   ===================================================== */
+
+footer {
+    margin-top: auto;
+    border-top: 1px solid #e5e7eb;
+}
+
+footer a {
+    transition: var(--transition);
+}
+
+footer a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* =====================================================
+   Loading & Transitions
+   ===================================================== */
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Smooth transitions */
+a, button, input, textarea, select {
+    transition: var(--transition);
+}
+
+/* =====================================================
+   Spacing Utilities
+   ===================================================== */
+
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.mt-5 {
+    margin-top: 3rem !important;
+}
+
+/* =====================================================
+   Responsive Design
+   ===================================================== */
+
+@media (max-width: 992px) {
+    .hero-section {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+
+    .navbar {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .brainora-logo {
+        font-size: 2.5rem;
+    }
+
+    .brainora-title {
+        font-size: 1.5rem;
+    }
+
+    .auth-form .form-control {
+        font-size: 16px; /* Prevents zoom on mobile */
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+
+    .hero-section {
+        text-align: center;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .text-lg-end {
+        text-align: start !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 0 15px;
+    }
+
+    .card {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* =====================================================
+   Animation Styles
+   ===================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-up {
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* =====================================================
+   Custom Scrollbar
+   ===================================================== */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

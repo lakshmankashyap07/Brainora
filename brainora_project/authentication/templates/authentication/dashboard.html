@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Brainora{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+                <div>
+                    <h1 class="mb-1">Welcome, {{ user.first_name|default:user.username }}!</h1>
+                    <p class="text-muted mb-0">Semester {{ user.semester|default:"Not set" }} {% if user.college_id %}| College ID: {{ user.college_id }}{% endif %}</p>
+                </div>
+            </div>
+            <div>
+                <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-edit"></i> Edit Profile</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Tabs -->
+        <ul class="nav nav-pills mb-4" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">Overview</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="courses-tab" data-bs-toggle="pill" data-bs-target="#courses" type="button" role="tab">Courses</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="papers-tab" data-bs-toggle="pill" data-bs-target="#papers" type="button" role="tab">Papers</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="resources-tab" data-bs-toggle="pill" data-bs-target="#resources" type="button" role="tab">Resources</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="activities-tab" data-bs-toggle="pill" data-bs-target="#activities" type="button" role="tab">Activities</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div role="button" class="card dashboard-action border-0 shadow-sm text-center p-3 clickable-tab" data-bs-toggle="pill" data-bs-target="#courses">
+                            <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                            <h6 class="mb-0">Courses</h6>
+                            <small class="text-muted">{{ courses.count }} total</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div role="button" class="card dashboard-action border-0 shadow-sm text-center p-3 clickable-tab" data-bs-toggle="pill" data-bs-target="#papers">
+                            <i class="fas fa-file-pdf fa-2x text-danger mb-2"></i>
+                            <h6 class="mb-0">Recent Papers</h6>
+                            <small class="text-muted">{{ recent_papers.count }} recent</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div role="button" class="card dashboard-action border-0 shadow-sm text-center p-3 clickable-tab" data-bs-toggle="pill" data-bs-target="#activities">
+                            <i class="fas fa-calendar-check fa-2x text-warning mb-2"></i>
+                            <h6 class="mb-0">Events</h6>
+                            <small class="text-muted">{{ upcoming_activities.count }} upcoming</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div role="button" class="card dashboard-action border-0 shadow-sm text-center p-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="fas fa-upload fa-2x text-success mb-2"></i>
+                            <h6 class="mb-0">Upload</h6>
+                            <small class="text-muted">Share materials</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Announcements</h5>
+                        <p class="text-muted">View latest announcements and important notes in the Activities tab.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Tab -->
+            <div class="tab-pane fade" id="courses" role="tabpanel">
+                <div class="row">
+                    {% if courses %}
+                    {% for course in courses %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card course-card h-100 border-0 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-1">{{ course.code }}</h5>
+                                <small>{{ course.title }}</small>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text small"><strong>Instructor:</strong> {{ course.instructor }}</p>
+                                <p class="card-text small mb-0"><strong>Materials:</strong> {{ course.papers.count }} papers</p>
+                            </div>
+                            <div class="card-footer bg-white border-top">
+                                <a href="{% url 'course_detail' course.id %}" class="btn btn-sm btn-primary">View Papers</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No courses available for your semester.</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Papers Tab -->
+            <div class="tab-pane fade" id="papers" role="tabpanel">
+                <div class="row">
+                    {% if recent_papers %}
+                    {% for paper in recent_papers %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card paper-card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5 class="card-title">{{ paper.title }}</h5>
+                                        <span class="badge bg-primary">{{ paper.get_paper_type_display }}</span>
+                                    </div>
+                                    <span class="badge bg-secondary">{{ paper.year }}</span>
+                                </div>
+                                <p class="card-text text-muted small"><i class="fas fa-user"></i> Uploaded by: {{ paper.uploaded_by.username }}</p>
+                            </div>
+                            <div class="card-footer bg-white border-top">
+                                <a href="{{ paper.file.url }}" class="btn btn-sm btn-primary w-100" download><i class="fas fa-download"></i> Download</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12"><div class="alert alert-info">No recent papers available.</div></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Activities Tab -->
+            <div class="tab-pane fade" id="activities" role="tabpanel">
+                <div class="row">
+                    {% if upcoming_activities %}
+                    {% for activity in upcoming_activities %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card activity-card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title">{{ activity.title }}</h5>
+                                    <span class="badge bg-primary">{{ activity.get_activity_type_display }}</span>
+                                </div>
+                                <p class="card-text text-muted">{{ activity.description|truncatewords:20 }}</p>
+                                <p class="text-muted small"><i class="fas fa-calendar-alt"></i> {{ activity.date|date:"M d, Y H:i" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12"><div class="alert alert-info">No upcoming activities.</div></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Resources Tab -->
+            <div class="tab-pane fade" id="resources" role="tabpanel">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="btn-group mb-3" role="group" aria-label="resource-categories">
+                            <button class="btn btn-outline-secondary resource-filter" data-category="notes">Notes</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="assignment">Assignment</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="lab">Lab File</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="pyq">PYQ</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="roadmap">Roadmap</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="whatsapp">Whatsapp Community</button>
+                            <button class="btn btn-outline-secondary resource-filter" data-category="official">Official Links</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="resourcesList">
+                    {% if resources %}
+                        {% for res in resources %}
+                        <div class="col-md-6 mb-3 resource-item" data-category="{{ res.category }}">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ res.title }}</h6>
+                                    <p class="small text-muted mb-2">{{ res.get_category_display }}</p>
+                                    {% if res.file %}
+                                    <a href="{{ res.file.url }}" class="btn btn-sm btn-primary" download>Download</a>
+                                    {% endif %}
+                                    {% if res.link %}
+                                    <a href="{{ res.link }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">Open Link</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12"><div class="alert alert-info">No resources uploaded yet.</div></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload Resource</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="{% url 'upload_resource' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          {{ resource_form.non_field_errors }}
+          <div class="mb-3">{{ resource_form.title.label_tag }}{{ resource_form.title }}</div>
+          <div class="mb-3">{{ resource_form.category.label_tag }}{{ resource_form.category }}</div>
+          <div class="mb-3">{{ resource_form.file.label_tag }}{{ resource_form.file }}</div>
+          <div class="mb-3">{{ resource_form.link.label_tag }}{{ resource_form.link }}</div>
+          <div class="mb-3">{{ resource_form.description.label_tag }}{{ resource_form.description }}</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.clickable-tab').forEach(function(el){
+        el.style.cursor = 'pointer';
+    });
+
+    // resource category filter
+    document.querySelectorAll('.resource-filter').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var cat = this.getAttribute('data-category');
+            document.querySelectorAll('.resource-item').forEach(function(item){
+                if(cat === 'all' || item.getAttribute('data-category') === cat){
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

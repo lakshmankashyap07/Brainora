@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Previous Year Papers - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <h1 class="mb-2"><i class="fas fa-file-pdf"></i> Previous Year Papers</h1>
+            <p class="text-muted">Your semester's exam papers and resources</p>
+        </div>
+        <div class="col-lg-4">
+            <form method="GET" class="row g-2">
+                <div class="col-auto">
+                    <select class="form-select form-select-sm" name="type" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        <option value="midterm" {% if selected_type == 'midterm' %}selected{% endif %}>Midterm</option>
+                        <option value="final" {% if selected_type == 'final' %}selected{% endif %}>Final</option>
+                        <option value="quiz" {% if selected_type == 'quiz' %}selected{% endif %}>Quiz</option>
+                        <option value="assignment" {% if selected_type == 'assignment' %}selected{% endif %}>Assignment</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if papers %}
+    <div class="row">
+        {% for paper in papers %}
+        <div class="col-lg-6 mb-4">
+            <div class="card paper-card h-100 border-0 shadow-sm hover-lift">
+                <div class="card-header bg-light border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ paper.course.code }}: {{ paper.course.title }}</h5>
+                            <small class="text-muted">{{ paper.title }}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ paper.year }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="badge bg-success me-2">{{ paper.get_paper_type_display }}</span>
+                    </div>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-calendar"></i> 
+                        Uploaded on: {{ paper.created_at|date:"M d, Y" }}
+                    </p>
+                    <p class="card-text text-muted small">
+                        <i class="fas fa-user"></i> 
+                        By: {{ paper.uploaded_by.username }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-top">
+                    <a href="{{ paper.file.url }}" class="btn btn-primary btn-sm w-100" download>
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Info -->
+    <div class="text-center mt-5">
+        <p class="text-muted">Showing {{ papers.count }} papers</p>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i> 
+        {% if selected_type %}
+            No {{ selected_type }} papers found.
+        {% else %}
+            No previous year papers available yet.
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
