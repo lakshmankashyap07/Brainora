@@ -181,7 +181,7 @@ def papers_view(request):
     
     # Filter by course
     course_filter = request.GET.get('course', '')
-    if course_filter:
+    if course_filter and course_filter.isdigit():
         papers = papers.filter(course_id=course_filter)
     
     # Get available courses for filter
@@ -211,3 +211,12 @@ def activities_view(request):
         'selected_type': activity_type,
     }
     return render(request, 'pages/activities.html', context)
+
+def privacy_policy_view(request):
+    """Display privacy policy page"""
+    return render(request, 'pages/privacy_policy.html')
+
+
+def whatsapp_view(request):
+    """Display WhatsApp connect page with Group and Channel options"""
+    return render(request, 'pages/whatsapp.html')

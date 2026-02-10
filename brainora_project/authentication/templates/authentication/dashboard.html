@@ -21,24 +21,7 @@
             </div>
         </div>
 
-        <!-- Dashboard Tabs -->
-        <ul class="nav nav-pills mb-4" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">Overview</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="courses-tab" data-bs-toggle="pill" data-bs-target="#courses" type="button" role="tab">Courses</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="papers-tab" data-bs-toggle="pill" data-bs-target="#papers" type="button" role="tab">Papers</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="resources-tab" data-bs-toggle="pill" data-bs-target="#resources" type="button" role="tab">Resources</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="activities-tab" data-bs-toggle="pill" data-bs-target="#activities" type="button" role="tab">Activities</button>
-            </li>
-        </ul>
+        <!-- Dashboard tabs removed as requested -->
 
         <div class="tab-content">
             <!-- Overview Tab -->
@@ -65,14 +48,73 @@
                             <small class="text-muted">{{ upcoming_activities.count }} upcoming</small>
                         </div>
                     </div>
+                    <!-- New resource cards -->
                     <div class="col-md-3 mb-3">
-                        <div role="button" class="card dashboard-action border-0 shadow-sm text-center p-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                            <i class="fas fa-upload fa-2x text-success mb-2"></i>
-                            <h6 class="mb-0">Upload</h6>
-                            <small class="text-muted">Share materials</small>
-                        </div>
+                        <a href="#roadmap" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-map fa-2x text-primary mb-2"></i>
+                            <h6 class="mb-0">Roadmap</h6>
+                            <small class="text-muted">Learning path</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="https://whatsapp.com/channel/0029Vb7ZRhrChq6Gg2I2GP2H" target="_blank" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fab fa-whatsapp fa-2x text-success mb-2"></i>
+                            <h6 class="mb-0">Whatsapp</h6>
+                            <small class="text-muted">Community</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#pyq" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-question-circle fa-2x text-info mb-2"></i>
+                            <h6 class="mb-0">PYQ</h6>
+                            <small class="text-muted">Old papers</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#holiday" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
+                            <h6 class="mb-0">Holiday</h6>
+                            <small class="text-muted">Schedule</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#lab-file" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-flask fa-2x text-secondary mb-2"></i>
+                            <h6 class="mb-0">Lab File</h6>
+                            <small class="text-muted">Practicals</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#notes" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-sticky-note fa-2x text-dark mb-2"></i>
+                            <h6 class="mb-0">Notes</h6>
+                            <small class="text-muted">Study material</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#assignment" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-tasks fa-2x text-danger mb-2"></i>
+                            <h6 class="mb-0">Assignment</h6>
+                            <small class="text-muted">Tasks</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#official-links" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-link fa-2x text-primary mb-2"></i>
+                            <h6 class="mb-0">Official Links</h6>
+                            <small class="text-muted">Resources</small>
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="#college-activities" class="card dashboard-action border-0 shadow-sm text-center p-3 text-decoration-none">
+                            <i class="fas fa-graduation-cap fa-2x text-success mb-2"></i>
+                            <h6 class="mb-0">College Activities</h6>
+                            <small class="text-muted">Events</small>
+                        </a>
                     </div>
                 </div>
+                </div>
+
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Announcements</h5>

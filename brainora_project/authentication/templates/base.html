@@ -12,47 +12,62 @@
 </head>
 <body>
     {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
                 <i class="fas fa-brain"></i> Brainora
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">
-                            <i class="fas fa-home"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'courses' %}">
-                            <i class="fas fa-book"></i> Courses
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'papers' %}">
-                            <i class="fas fa-file-pdf"></i> Papers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'activities' %}">
-                            <i class="fas fa-calendar-check"></i> Activities
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> {{ user.first_name|default:user.username }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn btn-link nav-link" type="button" id="mainMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Menu">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mainMenuDropdown" style="min-width: 250px;">
+                        <li class="profile-header-section">
+                            <div class="profile-header-content">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="profile-name-section">
+                                    <h5 class="profile-name">{{ user.first_name|default:user.username }}</h5>
+                                    <p class="profile-email">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="fas fa-star"></i> Points Earned</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
+                        <li><a class="dropdown-item" href="{% url 'activities' %}"><i class="fas fa-tasks"></i> Your Activities</a></li>
+                        
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                        
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="themeToggle"><i class="fas fa-moon"></i> <span id="themeText">Theme (Dark)</span></a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-download"></i> Downloads</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-certificate"></i> Certificates</a></li>
+                        
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-globe"></i> Language
+                            </a>
+                            <ul class="dropdown-menu dropdown-submenu" aria-labelledby="languageDropdown">
+                                <li><a class="dropdown-item" href="#" data-language="en"><i class="fas fa-check"></i> English</a></li>
+                                <li><a class="dropdown-item" href="#" data-language="hi">हिंदी (Hindi)</a></li>
+                                <li><a class="dropdown-item" href="#" data-language="hinglish">Hinglish</a></li>
+                            </ul>
+                        </li>
+                        
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-flag"></i> Report</a></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -71,34 +86,53 @@
 
     {% block content %}{% endblock %}
 
-    <footer class="bg-dark text-white mt-5 py-4">
-        <div class="container">
+    {% block footer %}
+    <!-- Footer -->
+    <footer class="text-white mt-5 py-4">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <h5><i class="fas fa-brain"></i> Brainora</h5>
-                    <p class="text-muted">Your college learning hub</p>
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">
+                        <i class="fas fa-brain"></i> Brainora
+                    </h5>
+                    <p class="text-muted">Your ultimate learning platform for academic success.</p>
                 </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled text-muted">
-                        <li><a href="{% url 'home' %}" class="text-muted text-decoration-none">Home</a></li>
-                        <li><a href="{% url 'courses' %}" class="text-muted text-decoration-none">Courses</a></li>
-                        <li><a href="{% url 'papers' %}" class="text-muted text-decoration-none">Papers</a></li>
+                <div class="col-md-4 mb-3">
+                    <h6 class="mb-3">Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="https://www.instagram.com/lak5hm_n_07/" target="_blank" class="text-muted text-decoration-none" title="Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="https://github.com/lakshmankashyap07" target="_blank" class="text-muted text-decoration-none" title="GitHub">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/lakshman-kashyap0/" target="_blank" class="text-muted text-decoration-none" title="LinkedIn">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                        <a href="{% url 'whatsapp' %}" class="text-muted text-decoration-none" title="Whatsapp">
+                            <i class="fab fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6 class="mb-3">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#about" class="text-muted text-decoration-none"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="{% url 'privacy_policy' %}#contact" class="text-muted text-decoration-none"><i class="fas fa-envelope"></i> Contact</a></li>
+                        <li><a href="{% url 'privacy_policy' %}" class="text-muted text-decoration-none"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
-                    <h5>Connect</h5>
-                    <p class="text-muted">
-                        <a href="#" class="text-muted me-2"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-muted me-2"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-muted"><i class="fab fa-instagram"></i></a>
-                    </p>
+            </div>
+            
+            <hr class="bg-secondary">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">&copy; 2024 Brainora. All rights reserved.</p>
                 </div>
             </div>
-            <hr class="border-secondary">
-            <p class="text-center text-muted mb-0">&copy; 2026 Brainora. All rights reserved.</p>
         </div>
     </footer>
+    {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>

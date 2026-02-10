@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Root: show login (dashboard is protected)
-    path('', views.login_view, name='home'),
+    # Root: show home page
+    path('', views.home_view, name='home'),
     
     # Authentication
     path('login/', views.login_view, name='login'),
@@ -23,4 +23,10 @@ urlpatterns = [
     
     # College Activities
     path('activities/', views.activities_view, name='activities'),
+    
+    # Privacy Policy
+    path('privacy-policy/', views.privacy_policy_view, name='privacy_policy'),
+    
+    # WhatsApp
+    path('whatsapp/', views.whatsapp_view, name='whatsapp'),
 ]

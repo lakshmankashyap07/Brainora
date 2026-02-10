@@ -44,7 +44,7 @@ class SignUpForm(UserCreationForm):
             'placeholder': 'Choose a username',
         })
     )
-    password1 = forms.CharField(
+    password = forms.CharField(
         label='Password',
         strip=False,
         widget=forms.PasswordInput(attrs={
@@ -52,7 +52,7 @@ class SignUpForm(UserCreationForm):
             'placeholder': 'Create a strong password',
         })
     )
-    password2 = forms.CharField(
+    password_2 = forms.CharField(
         label='Confirm Password',
         strip=False,
         widget=forms.PasswordInput(attrs={
@@ -79,7 +79,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'college_id', 'password1', 'password2')
+        fields = ('username', 'email', 'college_id')
 
 
 class ResourceUploadForm(forms.ModelForm):

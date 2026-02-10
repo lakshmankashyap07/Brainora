@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-shield-alt"></i> Privacy Policy
+            </h1>
+
+            <h5 class="mb-3">Welcome to Brainora</h5>
+            <p>Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our learning platform.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">1. Information We Collect</h5>
+            <p><strong>a) Personal Information</strong></p>
+            <ul class="ms-3">
+                <li>Name</li>
+                <li>Email address</li>
+                <li>Phone number</li>
+                <li>Profile details</li>
+                <li>Login credentials</li>
+            </ul>
+            <p><strong>b) Usage Information</strong></p>
+            <ul class="ms-3">
+                <li>Courses enrolled</li>
+                <li>Progress data</li>
+                <li>Time spent on lessons</li>
+                <li>Device and browser information</li>
+                <li>IP address</li>
+            </ul>
+            <p><strong>c) Payment Information (if applicable)</strong></p>
+            <ul class="ms-3">
+                <li>Transaction details</li>
+                <li>Payment method (handled securely by third-party providers)</li>
+                <li><span class="badge bg-warning">⚠️</span> We do not store your card or bank details.</li>
+            </ul>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">2. How We Use Your Information</h5>
+            <p>We use your information to:</p>
+            <ul class="ms-3">
+                <li><span class="badge bg-success">✅</span> Provide and improve our services</li>
+                <li><span class="badge bg-success">✅</span> Create and manage your account</li>
+                <li><span class="badge bg-success">✅</span> Personalize learning experience</li>
+                <li><span class="badge bg-success">✅</span> Send important updates and notifications</li>
+                <li><span class="badge bg-success">✅</span> Process payments</li>
+                <li><span class="badge bg-success">✅</span> Provide customer support</li>
+                <li><span class="badge bg-success">✅</span> Analyze platform performance</li>
+            </ul>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">3. Data Sharing and Disclosure</h5>
+            <p>We do NOT sell your personal data.</p>
+            <p>We may share information with:</p>
+            <ul class="ms-3">
+                <li>Trusted service providers (hosting, payment, analytics)</li>
+                <li>Legal authorities (if required by law)</li>
+                <li>All partners follow strict data protection rules.</li>
+            </ul>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">4. Data Security</h5>
+            <p>We take security seriously and use:</p>
+            <ul class="ms-3">
+                <li><span class="badge bg-danger">🔒</span> SSL encryption</li>
+                <li><span class="badge bg-danger">🔒</span> Secure servers</li>
+                <li><span class="badge bg-danger">🔒</span> Authentication systems</li>
+                <li><span class="badge bg-danger">🔒</span> Regular monitoring</li>
+            </ul>
+            <p class="text-muted small">However, no online system is 100% secure.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">5. Cookies Policy</h5>
+            <p>Brainora uses cookies to:</p>
+            <ul class="ms-3">
+                <li>🍪 Remember login sessions</li>
+                <li>🍪 Improve user experience</li>
+                <li>🍪 Analyze website traffic</li>
+            </ul>
+            <p class="small">You can disable cookies in your browser settings.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">6. User Rights</h5>
+            <p>You have the right to:</p>
+            <ul class="ms-3">
+                <li><span class="badge bg-info">✔</span> Access your data</li>
+                <li><span class="badge bg-info">✔</span> Update your information</li>
+                <li><span class="badge bg-info">✔</span> Delete your account</li>
+                <li><span class="badge bg-info">✔</span> Withdraw consent</li>
+                <li><span class="badge bg-info">✔</span> Request data copy</li>
+            </ul>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">7. Third-Party Links</h5>
+            <p>Our platform may contain links to external websites. We are not responsible for their privacy practices. Please read their policies separately.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">8. Children's Privacy</h5>
+            <p>Brainora is not intended for children under 13 years of age without parental consent. We do not knowingly collect data from minors.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">9. Policy Updates</h5>
+            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with a new effective date.</p>
+
+            <hr class="my-4">
+
+            <h5 class="mt-4 mb-3">10. Contact Us</h5>
+            <p>If you have any questions about this Privacy Policy, contact us:</p>
+            <div class="alert alert-info">
+                <ul class="mb-0 ms-3">
+                    <li>📧 Email: support@brainora.com</li>
+                    <li>📍 Website: https://www.brainora.com</li>
+                </ul>
+            </div>
+
+            <div class="mt-5 text-center">
+                <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer id="contact" class="bg-gradient text-white mt-5 py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h5 class="mb-2">Contact Information – Brainora</h5>
+                <p>Have questions or need support? We’re here to help you anytime.</p>
+                <hr class="bg-light">
+                <p class="mb-1"><strong>📍 Contact Details</strong></p>
+                <ul class="list-unstyled mb-3">
+                    <li>Website Name: Brainora</li>
+                    <li>Email: <a href="mailto:lakshmankashyap.yt@gmail.com" class="text-white">lakshmankashyap.yt@gmail.com</a></li>
+                    <li>Phone: <span class="text-white">+91-6387898373</span></li>
+                    <li>Office Address: <span class="text-white">Faizabad Road, Near BBD, Lucknow, Uttar Pradesh, India</span></li>
+                </ul>
+                <hr class="bg-light">
+                <p class="mb-0"><strong>🕒 Support Hours</strong></p>
+                <p class="mb-0">Monday – Saturday | 10:00 AM – 7:00 PM (IST)</p>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

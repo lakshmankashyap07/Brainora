@@ -4,115 +4,28 @@
 {% block title %}College Activities - Brainora{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row mb-5">
-        <div class="col-lg-8">
-            <h1 class="mb-2"><i class="fas fa-calendar-check"></i> College Activities</h1>
-            <p class="text-muted">Events, notices, and important updates</p>
-        </div>
-        <div class="col-lg-4">
-            <form method="GET" class="row g-2">
-                <div class="col-auto">
-                    <select class="form-select form-select-sm" name="type" onchange="this.form.submit()">
-                        <option value="">All Types</option>
-                        <option value="event" {% if selected_type == 'event' %}selected{% endif %}>Events</option>
-                        <option value="announcement" {% if selected_type == 'announcement' %}selected{% endif %}>Announcements</option>
-                        <option value="holiday" {% if selected_type == 'holiday' %}selected{% endif %}>Holidays</option>
-                        <option value="notice" {% if selected_type == 'notice' %}selected{% endif %}>Notices</option>
-                        <option value="deadline" {% if selected_type == 'deadline' %}selected{% endif %}>Deadlines</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-    </div>
+{% endblock %}
 
-    {% if activities %}
-    <div class="row">
-        {% for activity in activities %}
-        <div class="col-lg-6 mb-4">
-            <div class="card activity-card h-100 border-0 shadow-sm hover-lift">
-                {% if activity.image %}
-                <img src="{{ activity.image.url }}" class="card-img-top" alt="{{ activity.title }}" style="height: 250px; object-fit: cover;">
-                {% else %}
-                <div class="card-img-top bg-gradient" style="height: 250px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="fas fa-{% if activity.activity_type == 'event' %}calendar-alt{% elif activity.activity_type == 'announcement' %}bullhorn{% elif activity.activity_type == 'holiday' %}sun{% elif activity.activity_type == 'notice' %}clipboard-list{% else %}hourglass-end{% endif %} fa-3x text-white"></i>
-                </div>
-                {% endif %}
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title">{{ activity.title }}</h5>
-                        <span class="badge bg-primary">{{ activity.get_activity_type_display }}</span>
-                    </div>
-                    <p class="card-text text-muted">{{ activity.description|truncatewords:30 }}</p>
-                    
-                    <div class="activity-meta mt-3 pt-3 border-top">
-                        <p class="mb-2 text-muted small">
-                            <i class="fas fa-calendar-alt"></i>
-                            {{ activity.date|date:"M d, Y H:i" }}
-                        </p>
-                        {% if activity.location %}
-                        <p class="mb-0 text-muted small">
-                            <i class="fas fa-map-marker-alt"></i>
-                            {{ activity.location }}
-                        </p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="card-footer bg-white border-top">
-                    <button class="btn btn-sm btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#activityModal{{ activity.id }}">
-                        <i class="fas fa-eye"></i> View Details
-                    </button>
-                </div>
+{% block footer %}
+<footer class="bg-gradient text-white mt-5 py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h5 class="mb-2">Contact Information – Brainora</h5>
+                <p>Have questions or need support? We're here to help you anytime.</p>
+                <hr class="bg-light">
+                <p class="mb-1"><strong>📍 Contact Details</strong></p>
+                <ul class="list-unstyled mb-3">
+                    <li>Website Name: Brainora</li>
+                    <li>Email: <a href="mailto:lakshmankashyap.yt@gmail.com" class="text-white">lakshmankashyap.yt@gmail.com</a></li>
+                    <li>Phone: <span class="text-white">+91-6387898373</span></li>
+                    <li>Office Address: <span class="text-white">Faizabad Road, Near BBD, Lucknow, Uttar Pradesh, India</span></li>
+                </ul>
+                <hr class="bg-light">
+                <p class="mb-0"><strong>🕒 Support Hours</strong></p>
+                <p class="mb-0">Monday – Saturday | 10:00 AM – 7:00 PM (IST)</p>
             </div>
         </div>
-
-        <!-- Modal for activity details -->
-        <div class="modal fade" id="activityModal{{ activity.id }}" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content border-0">
-                    <div class="modal-header border-0 pb-0">
-                        <h5 class="modal-title">{{ activity.title }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        {% if activity.image %}
-                        <img src="{{ activity.image.url }}" class="img-fluid rounded mb-3" alt="{{ activity.title }}">
-                        {% endif %}
-                        <p class="lead">{{ activity.description }}</p>
-                        <div class="alert alert-light border">
-                            <p class="mb-2">
-                                <strong><i class="fas fa-tag"></i> Type:</strong> 
-                                {{ activity.get_activity_type_display }}
-                            </p>
-                            <p class="mb-2">
-                                <strong><i class="fas fa-calendar-alt"></i> Date & Time:</strong> 
-                                {{ activity.date|date:"l, F j, Y \a\t H:i" }}
-                            </p>
-                            {% if activity.location %}
-                            <p class="mb-0">
-                                <strong><i class="fas fa-map-marker-alt"></i> Location:</strong> 
-                                {{ activity.location }}
-                            </p>
-                            {% endif %}
-                        </div>
-                        <p class="text-muted small">
-                            Posted by {{ activity.created_by.username|default:"Admin" }} on {{ activity.created_at|date:"M d, Y" }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
     </div>
-    {% else %}
-    <div class="alert alert-info" role="alert">
-        <i class="fas fa-info-circle"></i> 
-        {% if selected_type %}
-            No {{ selected_type }} found.
-        {% else %}
-            No activities posted yet.
-        {% endif %}
-    </div>
-    {% endif %}
-</div>
+</footer>
 {% endblock %}
