@@ -20,42 +20,38 @@
             <div class="row g-4 mb-5">
                 <!-- WhatsApp Group Card -->
                 <div class="col-md-6">
-                    <a href="https://chat.whatsapp.com/EUUAMqXqkFFFi4OvOPbysW?mode=gi_t" target="_blank" class="text-decoration-none">
-                        <div class="card whatsapp-card h-100 border-0 shadow-sm hover-lift" style="cursor: pointer;">
-                            <div class="card-body text-center py-5">
-                                <div style="font-size: 3rem; color: #25D366; margin-bottom: 1rem;">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <h4 class="card-title mb-3">WhatsApp Group</h4>
-                                <p class="card-text text-muted mb-3">Join our discussion group to connect with other students and share resources.</p>
-                                <div class="mt-4">
-                                    <button type="button" class="btn btn-success btn-lg w-100" onclick="window.open('https://chat.whatsapp.com/EUUAMqXqkFFFi4OvOPbysW?mode=gi_t', '_blank')">
-                                        <i class="fab fa-whatsapp"></i> Join Group
-                                    </button>
-                                </div>
+                    <div class="card whatsapp-card h-100 border-0 shadow-sm hover-lift" style="cursor: pointer;">
+                        <div class="card-body text-center py-5">
+                            <div style="font-size: 3rem; color: #25D366; margin-bottom: 1rem;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 class="card-title mb-3">WhatsApp Group</h4>
+                            <p class="card-text text-muted mb-3">Join our discussion group to connect with other students and share resources.</p>
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-success btn-lg w-100 pin-protected-btn" data-url="https://chat.whatsapp.com/EUUAMqXqkFFFi4OvOPbysW?mode=gi_t">
+                                    <i class="fab fa-whatsapp"></i> Join Group
+                                </button>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <!-- WhatsApp Channel Card -->
                 <div class="col-md-6">
-                    <a href="https://whatsapp.com/channel/0029Vb7ZRhrChq6Gg2I2GP2H" target="_blank" class="text-decoration-none">
-                        <div class="card whatsapp-card h-100 border-0 shadow-sm hover-lift" style="cursor: pointer;">
-                            <div class="card-body text-center py-5">
-                                <div style="font-size: 3rem; color: #25D366; margin-bottom: 1rem;">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                </div>
-                                <h4 class="card-title mb-3">WhatsApp Channel</h4>
-                                <p class="card-text text-muted mb-3">Subscribe to our channel for official updates, announcements, and important notices.</p>
-                                <div class="mt-4">
-                                    <button type="button" class="btn btn-success btn-lg w-100" onclick="window.open('https://whatsapp.com/channel/0029Vb7ZRhrChq6Gg2I2GP2H', '_blank')">
-                                        <i class="fab fa-whatsapp"></i> Subscribe Channel
-                                    </button>
-                                </div>
+                    <div class="card whatsapp-card h-100 border-0 shadow-sm hover-lift" style="cursor: pointer;">
+                        <div class="card-body text-center py-5">
+                            <div style="font-size: 3rem; color: #25D366; margin-bottom: 1rem;">
+                                <i class="fas fa-broadcast-tower"></i>
+                            </div>
+                            <h4 class="card-title mb-3">WhatsApp Channel</h4>
+                            <p class="card-text text-muted mb-3">Subscribe to our channel for official updates, announcements, and important notices.</p>
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-success btn-lg w-100 pin-protected-btn" data-url="https://whatsapp.com/channel/0029Vb7ZRhrChq6Gg2I2GP2H">
+                                    <i class="fab fa-whatsapp"></i> Subscribe Channel
+                                </button>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
 
@@ -106,4 +102,67 @@
         transform: translateY(-2px);
     }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var pendingUrl = null;
+
+    // PIN protected buttons
+    document.querySelectorAll('.pin-protected-btn').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+            e.preventDefault();
+            pendingUrl = this.getAttribute('data-url');
+            var pinModalEl = document.getElementById('pinModal');
+            var pinModal = new bootstrap.Modal(pinModalEl);
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').classList.add('d-none');
+            pinModal.show();
+        });
+    });
+
+    // PIN submission handler
+    document.getElementById('pinSubmitBtn').addEventListener('click', function(){
+        var pin = document.getElementById('pinInput').value || '';
+        var pinError = document.getElementById('pinError');
+        var pinModalEl = document.getElementById('pinModal');
+        var pinModal = bootstrap.Modal.getInstance(pinModalEl) || new bootstrap.Modal(pinModalEl);
+        
+        fetch('/validate-pin/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({pin: pin})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.valid){
+                pinError.classList.add('d-none');
+                try { pinModal.hide(); } catch(e) {}
+                if(pendingUrl){
+                    window.open(pendingUrl, '_blank');
+                }
+                pendingUrl = null;
+            } else {
+                pinError.textContent = 'Wrong password';
+                pinError.classList.remove('d-none');
+            }
+        })
+        .catch(err => {
+            pinError.textContent = 'Error validating PIN';
+            pinError.classList.remove('d-none');
+        });
+    });
+
+    // Allow pressing Enter in PIN input
+    document.getElementById('pinInput').addEventListener('keypress', function(e){
+        if(e.key === 'Enter'){
+            document.getElementById('pinSubmitBtn').click();
+        }
+    });
+});
+</script>
 {% endblock %}

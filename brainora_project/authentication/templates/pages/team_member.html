@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ member.name }} - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="member-card p-4">
+                <div class="d-flex align-items-center gap-4">
+                    <div class="member-avatar" style="width:140px;height:140px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+                        <img src="{% static member.image %}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                    <div>
+                        <h2 class="mb-1">{{ member.name }}</h2>
+                        <h5 class="text-muted mb-3">{{ member.role }}</h5>
+                        <div class="member-socials mb-3">
+                            <a href="{{ member.github }}" target="_blank" class="me-2"><i class="fab fa-github fa-lg"></i></a>
+                            <a href="{{ member.linkedin }}" target="_blank" class="me-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                            <a href="{{ member.instagram }}" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="member-description">
+                    <p>{{ member.description }}</p>
+                </div>
+
+                <a href="{% url 'about' %}" class="btn btn-outline-secondary mt-3">&larr; Back to About</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

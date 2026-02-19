@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Resource - Brainora{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 ms-3">
+    <div>
+      <h1>Upload Resource</h1>
+      <p class="text-muted">Click a category below, then upload your file</p>
+    </div>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary me-3"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+  </div>
+
+  <div class="container">
+    <!-- Category Buttons -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="btn-group-vertical btn-group-lg w-100" role="group">
+          <div class="btn-group mb-2" role="group">
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="notes"><i class="fas fa-sticky-note"></i> Notes</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="pyq"><i class="fas fa-question-circle"></i> PYQ</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="assignment"><i class="fas fa-tasks"></i> Assignment</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="lab"><i class="fas fa-flask"></i> Lab File</button>
+          </div>
+          <div class="btn-group mb-2" role="group">
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="roadmap"><i class="fas fa-map"></i> Roadmap</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="cs3f"><i class="fas fa-layer-group"></i> CS 3F</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="telegram"><i class="fab fa-telegram"></i> Telegram Premium</button>
+          </div>
+          <div class="btn-group mb-3" role="group">
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="official"><i class="fas fa-link"></i> Official Links</button>
+            <button type="button" class="btn btn-outline-primary category-btn" data-category="holiday"><i class="fas fa-calendar-alt"></i> Holiday</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0" id="selectedCategoryHeader">Select a category above to upload a file</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" action="{% url 'upload_resource' %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                {{ resource_form.title.label_tag }}
+                {{ resource_form.title }}
+              </div>
+              <div class="mb-3">
+                {{ resource_form.category.label_tag }}
+                {{ resource_form.category }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label">File <span class="badge bg-info">Max 50MB</span></label>
+                {{ resource_form.file }}
+                <small class="text-muted d-block mt-2">Supported: PDF, DOC, DOCX, PPTX, ZIP</small>
+              </div>
+              <div class="mb-3">
+                {{ resource_form.link.label_tag }}
+                {{ resource_form.link }}
+                <small class="text-muted d-block mt-2">Or share a link instead of a file</small>
+              </div>
+              <div class="mb-3">
+                {{ resource_form.description.label_tag }}
+                {{ resource_form.description }}
+              </div>
+              <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()"><i class="fas fa-times"></i> Cancel</button>
+                <button type="submit" class="btn btn-success" id="uploadSubmitBtn" disabled><i class="fas fa-upload"></i> Upload File</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .category-btn {
+    transition: all 0.3s ease;
+  }
+  .category-btn.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+  }
+  .btn-group-lg > .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  const categorySelect = document.querySelector('select[name="category"]');
+  const selectedHeader = document.getElementById('selectedCategoryHeader');
+  const uploadBtn = document.getElementById('uploadSubmitBtn');
+  
+  // Preselect category from URL param if provided
+  const params = new URLSearchParams(window.location.search);
+  const preselectedCategory = params.get('category');
+  
+  function selectCategory(cat) {
+    // Update category select value
+    categorySelect.value = cat;
+    
+    // Update button styling
+    categoryBtns.forEach(btn => {
+      if(btn.getAttribute('data-category') === cat) {
+        btn.classList.add('active');
+        selectedHeader.textContent = 'Upload file for: ' + btn.textContent.trim();
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    // Enable upload button
+    uploadBtn.disabled = false;
+  }
+  
+  // Add click handlers to category buttons
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', function(){
+      const cat = this.getAttribute('data-category');
+      selectCategory(cat);
+    });
+  });
+  
+  // Preselect if URL param exists
+  if(preselectedCategory) {
+    selectCategory(preselectedCategory);
+  }
+});
+</script>
+{% endblock %}

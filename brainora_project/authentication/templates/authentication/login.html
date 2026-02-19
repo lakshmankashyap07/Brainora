@@ -1,78 +1,203 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Login - Brainora{% endblock %}
+{% block title %}Login / Sign Up - Brainora{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <div class="text-center mb-3">
-                <h2 class="mb-0 fs-5">Please sign in to continue</h2>
-            </div>
-
-            <form method="POST" class="auth-form">
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    {{ form.username }}
-                    {% if form.username.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.username.errors|join:", " }}
-                    </div>
-                    {% endif %}
+<div class="auth-toggle-container">
+    <div class="auth-toggle-wrapper">
+        <!-- Left Panel - Toggle Buttons -->
+        <div class="auth-toggle-panel auth-toggle-left" id="authToggleLeft">
+            <div class="auth-toggle-content">
+                <div class="toggle-header">
+                    <h2 class="toggle-title">Welcome Back!</h2>
+                    <p class="toggle-subtitle">Sign in to access your learning dashboard</p>
                 </div>
-
-                <div class="mb-3">
-                    {{ form.password }}
-                    {% if form.password.errors %}
-                    <div class="invalid-feedback d-block">
-                        {{ form.password.errors|join:", " }}
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                    <label class="form-check-label" for="remember">
-                        Remember me
-                    </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 mb-3">
-                    <i class="fas fa-sign-in-alt"></i> Login
+                <button type="button" class="btn btn-toggle btn-toggle-primary" id="toggleToSignup">
+                    <span class="toggle-text">Don't have an account?</span>
+                    <span class="toggle-action">SIGN UP</span>
                 </button>
-            </form>
-
-            <div class="text-center mt-3">
-                <p class="mb-2 small">Don't have an account? <a href="{% url 'signup' %}" class="fw-bold">Sign Up</a></p>
-            </div>
-
-            <!-- Connect Section -->
-            <div class="connect-section mt-4 pt-3 border-top">
-                <h6 class="text-center text-muted mb-3 small">Connect</h6>
-                <div class="d-flex justify-content-center gap-3">
-                    <!-- Instagram -->
-                    <a href="https://www.instagram.com/lak5hm_n_07/" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">
-                        <i class="fab fa-instagram fa-lg"></i>
-                    </a>
-                    
-                    <!-- GitHub -->
-                    <a href="https://github.com/lakshmankashyap07" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
-                        <i class="fab fa-github fa-lg"></i>
-                    </a>
-                    
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/lakshman-kashyap0/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
-                        <i class="fab fa-linkedin fa-lg"></i>
-                    </a>
-                </div>
             </div>
         </div>
 
-        <!-- Footer removed on login page to avoid showing site footer before authentication -->
+        <!-- Right Panel - Forms -->
+        <div class="auth-forms-panel auth-forms-signin" id="authFormsPanel">
+            <!-- Sign In Form -->
+            <div class="auth-form-wrapper auth-form-signin active" id="signinForm">
+                <div class="form-header">
+                    <h3 class="form-title">Sign In</h3>
+                    <p class="form-subtitle">Please sign in to continue</p>
+                </div>
+
+                <form method="POST" class="auth-form" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="login">
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username or Email</label>
+                        {{ login_form.username }}
+                        {% if login_form.username.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ login_form.username.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        {{ login_form.password }}
+                        {% if login_form.password.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ login_form.password.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+
+                <!-- Social Links -->
+                <div class="auth-social mt-4 pt-3 border-top">
+                    <p class="text-center text-muted small mb-3">Connect with us</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://www.instagram.com/lak5hm_n_07/" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="https://github.com/lakshmankashyap07" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/lakshman-kashyap0/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="auth-form-wrapper auth-form-signup" id="signupForm">
+                <div class="form-header">
+                    <h3 class="form-title">Create Account</h3>
+                    <p class="form-subtitle">Join our learning community</p>
+                </div>
+
+                <form method="POST" class="auth-form" action="{% url 'signup' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="signup">
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        {{ signup_form.username }}
+                        {% if signup_form.username.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ signup_form.username.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        {{ signup_form.email }}
+                        {% if signup_form.email.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ signup_form.email.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="college_id" class="form-label">College ID</label>
+                        {{ signup_form.college_id }}
+                        {% if signup_form.college_id.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ signup_form.college_id.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Password</label>
+                        {{ signup_form.password1 }}
+                        {% if signup_form.password1.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ signup_form.password1.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirm Password</label>
+                        {{ signup_form.password2 }}
+                        {% if signup_form.password2.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ signup_form.password2.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Panel - Toggle Buttons (for Sign Up) -->
+        <div class="auth-toggle-panel auth-toggle-right" id="authToggleRight">
+            <div class="auth-toggle-content">
+                <div class="toggle-header">
+                    <h2 class="toggle-title">New here?</h2>
+                    <p class="toggle-subtitle">Join us and start your learning journey</p>
+                </div>
+                <button type="button" class="btn btn-toggle btn-toggle-secondary" id="toggleToSignin">
+                    <span class="toggle-action">SIGN IN</span>
+                    <span class="toggle-text">Already have an account?</span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleToSignup = document.getElementById('toggleToSignup');
+    const toggleToSignin = document.getElementById('toggleToSignin');
+    const authToggleLeft = document.getElementById('authToggleLeft');
+    const authToggleRight = document.getElementById('authToggleRight');
+    const authFormsPanel = document.getElementById('authFormsPanel');
+    const signinForm = document.getElementById('signinForm');
+    const signupForm = document.getElementById('signupForm');
+
+    function toggleToSignUpView() {
+        authFormsPanel.classList.add('auth-forms-signup');
+        authFormsPanel.classList.remove('auth-forms-signin');
+        signinForm.classList.remove('active');
+        signupForm.classList.add('active');
+        authToggleLeft.style.display = 'none';
+        authToggleRight.style.display = 'flex';
+    }
+
+    function toggleToSignInView() {
+        authFormsPanel.classList.remove('auth-forms-signup');
+        authFormsPanel.classList.add('auth-forms-signin');
+        signupForm.classList.remove('active');
+        signinForm.classList.add('active');
+        authToggleRight.style.display = 'none';
+        authToggleLeft.style.display = 'flex';
+    }
+
+    toggleToSignup.addEventListener('click', toggleToSignUpView);
+    toggleToSignin.addEventListener('click', toggleToSignInView);
+});
+</script>
 {% endblock %}
 
 {% block footer %}{% endblock %}

@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile - Brainora{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="edit-profile-header mb-5">
+                    <h1 class="page-title">Edit Your Profile</h1>
+                    <p class="page-subtitle">Update your personal information and profile details</p>
+                </div>
+
+                <div class="edit-profile-card">
+                    <form method="POST" enctype="multipart/form-data" class="edit-profile-form">
+                        {% csrf_token %}
+
+                        <!-- Profile Picture Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">Profile Picture</h5>
+                            <div class="profile-picture-edit">
+                                {% if user_profile.profile_picture %}
+                                    <img src="{{ user_profile.profile_picture.url }}" alt="{{ user_profile.username }}" class="profile-picture-preview" id="profilePreview">
+                                {% else %}
+                                    <div class="profile-picture-placeholder" id="profilePreview">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="profile-picture-input">
+                                    {{ form.profile_picture }}
+                                    <label for="{{ form.profile_picture.id_for_label }}" class="btn btn-primary btn-sm mt-2">
+                                        <i class="fas fa-cloud-upload-alt"></i> Change Photo
+                                    </label>
+                                    {% if form.profile_picture.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.profile_picture.errors|join:", " }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h5 class="section-title">Personal Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.first_name.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.last_name.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                                        {{ form.date_of_birth }}
+                                        {% if form.date_of_birth.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.date_of_birth.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.gender.id_for_label }}" class="form-label">Gender</label>
+                                        {{ form.gender }}
+                                        {% if form.gender.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.gender.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="{{ form.bio.id_for_label }}" class="form-label">Bio</label>
+                                        {{ form.bio }}
+                                        <small class="form-text text-muted">Tell people about yourself</small>
+                                        {% if form.bio.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.bio.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Information -->
+                        <div class="form-section">
+                            <h5 class="section-title">Account Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                                        {{ form.username }}
+                                        <small class="form-text text-muted">Your unique username</small>
+                                        {% if form.username.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.username.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.email.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <h5 class="section-title">Contact Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.phone_contact.id_for_label }}" class="form-label">Phone Number</label>
+                                        {{ form.phone_contact }}
+                                        {% if form.phone_contact.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.phone_contact.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.location.id_for_label }}" class="form-label">Location (City/Area)</label>
+                                        {{ form.location }}
+                                        {% if form.location.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.location.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Information -->
+                        <div class="form-section">
+                            <h5 class="section-title">Academic Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.college_id.id_for_label }}" class="form-label">College ID</label>
+                                        {{ form.college_id }}
+                                        {% if form.college_id.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.college_id.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.semester.id_for_label }}" class="form-label">Current Semester</label>
+                                        {{ form.semester }}
+                                        {% if form.semester.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.semester.errors|join:", " }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-lg me-2">
+                                <i class="fas fa-check"></i> Save Changes
+                            </button>
+                            <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Profile picture preview
+document.getElementById('{{ form.profile_picture.id_for_label }}').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const preview = document.getElementById('profilePreview');
+            if (preview.tagName === 'IMG') {
+                preview.src = event.target.result;
+            } else {
+                preview.innerHTML = '<img src="' + event.target.result + '" class="profile-picture-preview">';
+                preview.classList.remove('profile-picture-placeholder');
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Auto-select text in input fields on focus
+document.querySelectorAll('.edit-profile-form input[type="text"], .edit-profile-form input[type="email"], .edit-profile-form textarea').forEach(field => {
+    field.addEventListener('focus', function(e) {
+        // Select all text in the field
+        this.select();
+        // Add visual feedback
+        this.style.backgroundColor = 'rgba(27, 180, 225, 0.05)';
+    });
+    
+    field.addEventListener('blur', function(e) {
+        // Remove background color on blur
+        this.style.backgroundColor = '';
+    });
+    
+    // Highlight on click
+    field.addEventListener('click', function(e) {
+        if (this.value) {
+            this.select();
+        }
+    });
+});
+
+// Add smooth scrolling to form sections
+document.querySelectorAll('.section-title').forEach(title => {
+    title.addEventListener('mouseover', function() {
+        this.style.color = '#17A2B8';
+        this.style.paddingLeft = '10px';
+    });
+    
+    title.addEventListener('mouseout', function() {
+        this.style.color = '';
+        this.style.paddingLeft = '';
+    });
+});
+</script>
+{% endblock %}

@@ -4,10 +4,23 @@ from django.utils import timezone
 
 class CustomUser(AbstractUser):
     """Extended User model for Brainora"""
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+        ('N', 'Prefer not to say'),
+    ]
+    
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
     college_id = models.CharField(max_length=50, blank=True, null=True)
     semester = models.IntegerField(blank=True, null=True, choices=[(i, i) for i in range(1, 9)])
+    
+    # Additional profile fields
+    phone_contact = models.CharField(max_length=15, blank=True, null=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
     
     def __str__(self):
         return self.username
@@ -95,6 +108,9 @@ class Resource(models.Model):
         ('roadmap', 'Roadmap'),
         ('whatsapp', 'Whatsapp Community'),
         ('official', 'Official Links'),
+        ('cs3f', 'CS 3F'),
+        ('telegram', 'Telegram Premium'),
+        ('holiday', 'Holiday'),
     ]
 
     title = models.CharField(max_length=255)

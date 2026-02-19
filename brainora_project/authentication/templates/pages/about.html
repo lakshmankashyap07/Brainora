@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Brainora{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <!-- About Header -->
+        <div class="row mb-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="about-header text-center">
+                    <h1 class="about-title">About Brainora</h1>
+                    <p class="about-subtitle">Building the Future of Learning - One Student at a Time</p>
+                    <p class="about-description">
+                        Brainora is an innovative e-learning platform designed to revolutionize the way students learn and succeed academically. 
+                        Our mission is to provide accessible, high-quality educational content and resources to students everywhere.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meet Our Team Section -->
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="team-section-main">
+                    <h2 class="team-section-title">
+                        <i class="fas fa-users"></i> Meet Our Team
+                    </h2>
+                    <p class="team-section-subtitle">The talented minds behind Brainora</p>
+
+                    <div class="team-members-container">
+                        <!-- Team Member 1 -->
+                        <div class="team-member-item">
+                            <a href="{% url 'team_member' member='laksh' %}" class="text-decoration-none">
+                                <div class="team-member-avatar">
+                                    <img src="{% static 'images/laksh.jpg' %}" alt="Lakshman kashyap" class="team-avatar-img">
+                                </div>
+                                <div class="team-member-details">
+                                    <h5 class="team-member-name">Lakshman kashyap</h5>
+                                </div>
+                            </a>
+                            <div class="team-member-socials">
+                                <a href="https://github.com/lakshmankashyap07" target="_blank" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/lakshman-kashyap0/" target="_blank" title="LinkedIn">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="https://www.instagram.com/lak5hm_n_07/" target="_blank" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Team Member 2 -->
+                        <div class="team-member-item">
+                            <a href="{% url 'team_member' member='lucky' %}" class="text-decoration-none">
+                                <div class="team-member-avatar">
+                                    <img src="{% static 'images/lucky.png' %}" alt="Lucky Jaiswal" class="team-avatar-img">
+                                </div>
+                                <div class="team-member-details">
+                                    <h5 class="team-member-name">Lucky Jaiswal</h5>
+                                </div>
+                            </a>
+                            <div class="team-member-socials">
+                                <a href="https://github.com/Luckyjaiswa" target="_blank" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/luckyjaiswal98/" target="_blank" title="LinkedIn">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="https://www.instagram.com/lucky____jaiswal/" target="_blank" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Team Member 3 -->
+                        <div class="team-member-item">
+                            <a href="{% url 'team_member' member='mith' %}" class="text-decoration-none">
+                                <div class="team-member-avatar">
+                                    <img src="{% static 'images/mith.png' %}" alt="Mithlesh Kumar" class="team-avatar-img">
+                                </div>
+                                <div class="team-member-details">
+                                    <h5 class="team-member-name">Mithlesh Kumar</h5>
+                                </div>
+                            </a>
+                            <div class="team-member-socials">
+                                <a href="https://github.com/Mithleshyadavgithub" target="_blank" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/mithlesh-kumar-4ab73929a/" target="_blank" title="LinkedIn">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="https://www.instagram.com/mithleshyadav876/" target="_blank" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Team Member 4 -->
+                        <div class="team-member-item">
+                            <a href="{% url 'team_member' member='kriya' %}" class="text-decoration-none">
+                                <div class="team-member-avatar">
+                                    <img src="{% static 'images/kriya.jpg' %}" alt="Kriya Yadav" class="team-avatar-img">
+                                </div>
+                                <div class="team-member-details">
+                                    <h5 class="team-member-name">Kriya Yadav</h5>
+                                </div>
+                            </a>
+                            <div class="team-member-socials">
+                                <a href="https://github.com/kriyay3-yadav" target="_blank" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/kriya-yadav-741149334/" target="_blank" title="LinkedIn">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="https://www.instagram.com/kriyay2525/" target="_blank" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Features -->
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="about-features">
+                    <h3 class="features-title">Why Choose Brainora?</h3>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h5 class="feature-name">Quality Education</h5>
+                            <p class="feature-description">Premium educational content curated by experts</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <h5 class="feature-name">Expert Team</h5>
+                            <p class="feature-description">Dedicated professionals committed to your success</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h5 class="feature-name">Modern Platform</h5>
+                            <p class="feature-description">Cutting-edge technology for seamless learning</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h5 class="feature-name">24/7 Support</h5>
+                            <p class="feature-description">Always here to help you succeed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

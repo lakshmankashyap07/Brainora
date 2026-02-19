@@ -53,9 +53,14 @@
                     </p>
                 </div>
                 <div class="card-footer bg-white border-top">
-                    <a href="{{ paper.file.url }}" class="btn btn-primary btn-sm w-100" download>
-                        <i class="fas fa-download"></i> Download PDF
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ paper.file.url }}" target="_blank" class="btn btn-info btn-sm flex-fill">
+                            <i class="fas fa-eye"></i> Watch
+                        </a>
+                        <a href="{{ paper.file.url }}" class="btn btn-primary btn-sm flex-fill" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

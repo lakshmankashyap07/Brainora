@@ -94,3 +94,60 @@ class ResourceUploadForm(forms.ModelForm):
             'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'link': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Optional URL'}),
         }
+
+
+class EditProfileForm(forms.ModelForm):
+    """Form for editing user profile"""
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name', 'username', 'email', 'bio', 'profile_picture', 
+                  'phone_contact', 'gender', 'location', 'date_of_birth', 'college_id', 'semester')
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name',
+            }),
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Username',
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email Address',
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell us about yourself...',
+                'rows': 4,
+            }),
+            'profile_picture': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+            }),
+            'phone_contact': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone Number',
+                'type': 'tel',
+            }),
+            'gender': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'City/Location',
+            }),
+            'date_of_birth': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+            }),
+            'college_id': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'College ID',
+            }),
+            'semester': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+        }

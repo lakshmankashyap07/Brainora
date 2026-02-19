@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Brainora{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="row mb-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="profile-card">
+                    <div class="profile-cover">
+                        <div class="profile-cover-overlay"></div>
+                    </div>
+                    
+                    <div class="profile-header">
+                        <!-- Profile Picture -->
+                        <div class="profile-picture-container">
+                            {% if user_profile.profile_picture %}
+                                <img src="{{ user_profile.profile_picture.url }}" alt="{{ user_profile.username }}" class="profile-picture">
+                            {% else %}
+                                <div class="profile-picture profile-picture-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Profile Info -->
+                        <div class="profile-info">
+                            <h1 class="profile-name">{{ user_profile.first_name|default:user_profile.username }}</h1>
+                            <p class="profile-username">@{{ user_profile.username }}</p>
+                            <p class="profile-email"><i class="fas fa-envelope"></i> {{ user_profile.email }}</p>
+                            
+                            <div class="profile-actions">
+                                <a href="{% url 'edit_profile' %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="row">
+                    <!-- Main Profile Section -->
+                    <div class="col-lg-8">
+                        <!-- Action Buttons -->
+                        <div class="profile-section action-buttons-section">
+                            <h4 class="section-title">Connect</h4>
+                            <div class="action-buttons-grid">
+                                <a href="https://t.me/" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="fab fa-telegram"></i> Telegram
+                                </a>
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-layer-group"></i> CS 3F
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Bio Section -->
+                        {% if user_profile.bio %}
+                        <div class="profile-section">
+                            <h4 class="section-title">Bio</h4>
+                            <p class="section-content">{{ user_profile.bio }}</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Personal Information -->
+                        <div class="profile-section">
+                            <h4 class="section-title">Personal Information</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-user"></i> First Name</label>
+                                        <p class="info-value">{{ user_profile.first_name|default:"Not provided" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-user"></i> Last Name</label>
+                                        <p class="info-value">{{ user_profile.last_name|default:"Not provided" }}</p>
+                                    </div>
+                                </div>
+                                {% if user_profile.date_of_birth %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+                                        <p class="info-value">{{ user_profile.date_of_birth|date:"d M, Y" }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user_profile.gender %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-venus-mars"></i> Gender</label>
+                                        <p class="info-value">{{ user_profile.get_gender_display }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="profile-section">
+                            <h4 class="section-title">Contact Information</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-envelope"></i> Email</label>
+                                        <p class="info-value">{{ user_profile.email }}</p>
+                                    </div>
+                                </div>
+                                {% if user_profile.phone_contact %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-phone"></i> Phone</label>
+                                        <p class="info-value">{{ user_profile.phone_contact }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user_profile.location %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-map-marker-alt"></i> Location</label>
+                                        <p class="info-value">{{ user_profile.location }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Academic Information -->
+                        <div class="profile-section">
+                            <h4 class="section-title">Academic Information</h4>
+                            <div class="row g-3">
+                                {% if user_profile.college_id %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-id-card"></i> College ID</label>
+                                        <p class="info-value">{{ user_profile.college_id }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if user_profile.semester %}
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label"><i class="fas fa-book"></i> Semester</label>
+                                        <p class="info-value">Semester {{ user_profile.semester }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Stats -->
+                    <div class="col-lg-4">
+                        <div class="stats-card">
+                            <h5 class="stats-title">Account Status</h5>
+                            <div class="stat-item">
+                                <label class="stat-label">Member Since</label>
+                                <p class="stat-value">{{ user_profile.date_joined|date:"d M, Y" }}</p>
+                            </div>
+                            <hr>
+                            <div class="stat-item">
+                                <label class="stat-label">Last Login</label>
+                                <p class="stat-value">{{ user_profile.last_login|date:"d M, Y H:i"|default:"Never" }}</p>
+                            </div>
+                            <hr>
+                            <div class="stat-item">
+                                <label class="stat-label">Account Status</label>
+                                <p class="stat-value">
+                                    {% if user_profile.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactive</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions mt-4">
+                            <h5 class="actions-title">Quick Actions</h5>
+                            <a href="{% url 'edit_profile' %}" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </a>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                            <a href="{% url 'courses' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-book"></i> My Courses
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

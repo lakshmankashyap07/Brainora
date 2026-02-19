@@ -26,7 +26,11 @@
                         <li class="profile-header-section">
                             <div class="profile-header-content">
                                 <div class="profile-avatar">
-                                    <i class="fas fa-user-circle"></i>
+                                    {% if user.profile.profile_picture %}
+                                        <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="profile-avatar-img">
+                                    {% else %}
+                                        <i class="fas fa-user-circle"></i>
+                                    {% endif %}
                                 </div>
                                 <div class="profile-name-section">
                                     <h5 class="profile-name">{{ user.first_name|default:user.username }}</h5>
@@ -36,7 +40,7 @@
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
                         <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="fas fa-star"></i> Points Earned</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-bell"></i> Notifications</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
@@ -117,7 +121,7 @@
                 <div class="col-md-4 mb-3">
                     <h6 class="mb-3">Legal</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#about" class="text-muted text-decoration-none"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="{% url 'about' %}" class="text-muted text-decoration-none"><i class="fas fa-info-circle"></i> About</a></li>
                         <li><a href="{% url 'privacy_policy' %}#contact" class="text-muted text-decoration-none"><i class="fas fa-envelope"></i> Contact</a></li>
                         <li><a href="{% url 'privacy_policy' %}" class="text-muted text-decoration-none"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
                     </ul>
