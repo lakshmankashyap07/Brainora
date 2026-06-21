@@ -13,6 +13,10 @@ urlpatterns = [
     path('resources/', include('resources.urls')),
     path('activities/', include('activities.urls')),
     path('papers/', include('papers.urls')),
+    path('academic/', include('academic.urls')),
+    path('community/', include('community.urls')),
+    path('career/', include('career.urls')),
+    path('college/', include('college.urls')),
     path('api/', include('api.urls')),
 ]
 

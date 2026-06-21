@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}College Events - Brainora{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <h1 class="text-gradient mb-2">College Events</h1>
+                <p class="text-secondary mb-0">Discover and register for upcoming college events</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" class="row g-3">
+                    <div class="col-lg-6">
+                        <input type="text" name="q" class="form-control" placeholder="Search events..." value="{{ search_query }}">
+                    </div>
+                    <div class="col-lg-3">
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for value, label in categories %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <select name="date" class="form-select">
+                            <option value="">All Events</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="past">Past</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="row g-4">
+        {% for event in page_obj %}
+        <div class="col-lg-6" data-aos="fade-up">
+            <div class="glass-panel p-4 border-light hover-shadow transition h-100 d-flex flex-column">
+                {% if event.poster %}
+                <img src="{{ event.poster.url }}" class="img-fluid mb-3 rounded" alt="{{ event.title }}" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="text-primary fw-bold mb-1">{{ event.title }}</h5>
+                        <p class="text-secondary mb-0 small">{{ event.get_category_display }}</p>
+                    </div>
+                    {% if event.is_upcoming %}
+                    <span class="badge bg-success">Upcoming</span>
+                    {% elif event.is_ongoing %}
+                    <span class="badge bg-info">Ongoing</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Past</span>
+                    {% endif %}
+                </div>
+                
+                <div class="text-secondary small mb-3">
+                    <p class="mb-1">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>{{ event.start_date|date:"d M Y, H:i" }}
+                    </p>
+                    <p class="mb-1">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ event.venue }}
+                    </p>
+                    {% if event.is_online %}
+                    <p class="mb-0">
+                        <i class="fas fa-video me-2 text-primary"></i>Online Event
+                    </p>
+                    {% endif %}
+                </div>
+                
+                {% if event.seats_available %}
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ event.seats_registered|divide:event.seats_available|multiply:100 }}%;" aria-valuenow="{{ event.seats_registered }}" aria-valuemin="0" aria-valuemax="{{ event.seats_available }}">
+                        {{ event.seats_registered }}/{{ event.seats_available }} registered
+                    </div>
+                </div>
+                {% endif %}
+                
+                <p class="text-secondary small flex-grow-1">{{ event.description|truncatewords:30 }}</p>
+                
+                <div class="d-grid gap-2 d-sm-flex mt-auto">
+                    <a href="{% url 'college:event_detail' event.id %}" class="btn btn-primary-custom btn-sm">
+                        <i class="fas fa-eye me-1"></i>View Details
+                    </a>
+                    {% if user.is_authenticated and event.is_upcoming %}
+                    <a href="{% url 'college:event_register' event.id %}" class="btn btn-outline-primary btn-sm" method="POST" onclick="return confirm('Confirm registration?')">
+                        <i class="fas fa-check me-1"></i>Register
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+            <p class="text-secondary mt-3">No events found</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important; }
+.transition { transition: all 0.3s ease; }
+</style>
+{% endblock %}

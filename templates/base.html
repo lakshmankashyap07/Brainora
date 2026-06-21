@@ -86,23 +86,13 @@
             {% if user.is_authenticated %}
             <aside id="sidebar" class="col-auto glass-sidebar d-flex flex-column">
                 <div class="flex-grow-1">
-                    <a href="{% url 'dashboard:home' %}" class="nav-link-custom {% if request.resolver_match.view_name == 'dashboard:home' %}active{% endif %}">
-                        <i class="fas fa-th-large"></i> Dashboard
-                    </a>
-                    <a href="{% url 'courses:list' %}" class="nav-link-custom {% if 'courses' in request.path %}active{% endif %}">
-                        <i class="fas fa-graduation-cap"></i> Courses
-                    </a>
-                    <a href="{% url 'resources:list' %}" class="nav-link-custom {% if 'resources' in request.path and 'upload' not in request.path %}active{% endif %}">
-                        <i class="fas fa-folder-open"></i> Resources
-                    </a>
-                    <a href="{% url 'papers:list' %}" class="nav-link-custom {% if 'papers' in request.path %}active{% endif %}">
-                        <i class="fas fa-file-invoice"></i> Past Papers
-                    </a>
-                    <a href="{% url 'activities:list' %}" class="nav-link-custom {% if 'activities' in request.path %}active{% endif %}">
-                        <i class="fas fa-calendar-alt"></i> Activities
-                    </a>
-                    <a href="{% url 'resources:upload' %}" class="nav-link-custom {% if 'resources/upload' in request.path %}active{% endif %}">
-                        <i class="fas fa-cloud-upload-alt"></i> Upload Files
+                    <a href="{% url 'academic:resource_list' %}" class="nav-link-custom {% if 'academic' in request.path %}active{% endif %}"><i class="fas fa-user-graduate"></i> Academic</a>
+                    <a href="{% url 'community:forum_list' %}" class="nav-link-custom {% if 'community' in request.path %}active{% endif %}"><i class="fas fa-people-group"></i> Community</a>
+                    <a href="{% url 'career:internships_list' %}" class="nav-link-custom {% if 'career' in request.path %}active{% endif %}"><i class="fas fa-briefcase"></i> Career</a>
+                    <a href="{% url 'college:announcement_list' %}" class="nav-link-custom {% if 'college' in request.path %}active{% endif %}"><i class="fas fa-university"></i> College</a>
+                    <a href="{% url 'resources:list' %}" class="nav-link-custom {% if 'resources' in request.path %}active{% endif %}"><i class="fas fa-share-alt"></i> Resources</a>
+                    <a href="{% url 'authentication:profile' %}" class="nav-link-custom {% if 'profile' in request.path %}active{% endif %}">
+                        <i class="fas fa-user-shield"></i> Profile
                     </a>
                     <a href="{% url 'authentication:settings' %}" class="nav-link-custom {% if 'settings' in request.path %}active{% endif %}">
                         <i class="fas fa-cog"></i> Settings

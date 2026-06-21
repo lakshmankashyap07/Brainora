@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'activities.apps.ActivitiesConfig',
     'papers.apps.PapersConfig',
     'dashboard.apps.DashboardConfig',
+    'academic.apps.AcademicConfig',
+    'community.apps.CommunityConfig',
+    'career.apps.CareerConfig',
+    'college.apps.CollegeConfig',
     'api.apps.ApiConfig',
 ]
 

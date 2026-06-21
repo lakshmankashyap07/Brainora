@@ -12,11 +12,27 @@ from activities.models import CollegeActivity
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = 'Seeds the Brainora database with initial sample data'
+    help = 'Seeds the Brainora database with initial sample data (DISABLED by default)'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--force',
+            action='store_true',
+            help='Allow creation of sample data and default admin account',
+        )
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("Seeding Brainora database...")
-        
+        force = bool(kwargs.get('force'))
+        if not force:
+            self.stdout.write(
+                self.style.WARNING(
+                    'seed_data is disabled by default. Re-run with: python manage.py seed_data --force'
+                )
+            )
+            return
+
+        self.stdout.write("Seeding Brainora database (force enabled)...")
+
         # 1. Create Superuser if not exists
         if not User.objects.filter(username="admin").exists():
             admin_user = User.objects.create_superuser(
@@ -32,6 +48,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Superuser 'admin' created (pass: adminpassword123)"))
         else:
             admin_user = User.objects.get(username="admin")
+
 
         # 2. Create Sample Students
         students_data = [

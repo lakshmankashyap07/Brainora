@@ -1,0 +1,88 @@
+Brainora
+
+
+I have to attend a hackathon, i choosen a project that is learning platform named as "Brainora". 
+
+Explanation - that platform will be for the students for different-different colleges/Universities. Organisations (colleges/Universities) can create a Id and share that id with their students so that they(students ) can use information like notes, assignment, official Links, colleges information or other important things. 
+
+Working - Student will login with provided id and password by college/University, after login student have to select Course and also can select Section of needed and all the useful information will be show on the dashboard. 
+
+Technology - you can use HTML CSS JS as frontend and for backend expressJS, nodeJS or other that made my project complete, for Database MongoDB.
+
+Color - color should be blue and white as you can see in the image.
+
+Structure - First page will be login page and after login page Course,  after this all functions like notes, books, assignment or other functions will be show.
+
+Sign up page - for sign up user have to fill Name(first name and last name), Create username, email, mobile no, password, University roll no, course, branch, semester, section, session.
+
+Login page - username or email, password this page Should include 'remember me', forgot password featurees and more that needs in it.
+
+Functions or information categories -  
+Academic Features :
+✅ Previous Year Question Papers (PYQs)
+✅ Notes (PDF, PPT, Docs)
+✅ E-books
+✅ Assignments
+✅ Lab Manuals
+✅ Syllabus (semester-wise)
+✅ Academic Calendar
+✅ Time Table
+✅ Practical Files
+✅ Important Questions
+✅ Question Bank
+✅ Sample Papers
+✅ Faculty Notes
+
+Student Community:
+💬 Discussion Forum
+❓ Ask & Answer (like Stack Overflow)
+👥 Study Groups
+🎥 Live Study Rooms
+❤️ Like, Comment & Share notes
+👤 Follow classmates
+
+Career Features:
+Internship Updates
+Placement Preparation
+Aptitude Questions
+Coding Practice
+Resume Builder
+Mock Interviews
+Company-wise Interview Questions
+Job Alerts
+
+College Features :
+College Announcements
+Event Notifications
+Club Activities
+Workshop & Seminar Updates
+Lost & Found
+Complaint/Suggestion Portal
+Faculty Directory
+Campus Map
+
+Resource Sharing:
+Upload Notes
+Upload PYQs
+Upload Books
+Upload Assignments
+Upload Lab Files
+Version History
+File Ratings
+Report Inappropriate Content
+
+User Authentication
+Upload & Download Notes/PYQs/Books
+Smart Search & Filters
+AI Chat Assistant
+Semester-wise Resource Organization
+Discussion Forum
+Bookmark Resources
+College Announcements
+Contributor Leaderboard
+Exam Mode with AI-powered recommendations
+
+ 
+
+
+

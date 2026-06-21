@@ -2,7 +2,8 @@
 
 - [x] Install dependencies from requirements.txt
 - [x] Run Django migrations
-- [x] Run seed_data to populate initial records (and default superuser)
+- [ ] (Optional) Run seed_data --force to populate sample records (and default superuser)
+
 - [x] Run development server (runserver)
 - [ ] Run Django tests (optional, only if quick)
 - [ ] Verify endpoints: `/`, `/admin/`

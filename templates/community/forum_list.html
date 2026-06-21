@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Community - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h1 class="text-gradient mb-2">Student Community</h1>
+                        <p class="text-secondary mb-0">Connect, learn, and share with your peers</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'community:create_post' %}" class="btn btn-primary-custom">
+                            <i class="fas fa-plus me-2"></i>New Post
+                        </a>
+                        <a href="{% url 'community:ask_question' %}" class="btn btn-secondary-custom">
+                            <i class="fas fa-question me-2"></i>Ask Question
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" role="tablist" data-aos="fade-up">
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'community:forum_list' %}">
+                <i class="fas fa-comments me-2"></i>Forum
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'community:questions_list' %}">
+                <i class="fas fa-question-circle me-2"></i>Q&A
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'community:study_groups_list' %}">
+                <i class="fas fa-users me-2"></i>Study Groups
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'community:live_rooms_list' %}">
+                <i class="fas fa-video me-2"></i>Live Rooms
+            </a>
+        </li>
+    </ul>
+
+    <!-- Search -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-3">
+                <form method="GET" class="d-flex gap-2">
+                    <input type="text" name="q" class="form-control flex-grow-1" placeholder="Search posts, questions, groups..." value="{{ search_query }}">
+                    <select name="category" class="form-select" style="flex: 0 0 200px;">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary-custom">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="row g-3">
+        {% for post in posts %}
+        <div class="col-12" data-aos="fade-up">
+            <div class="glass-panel p-4 border-light hover-shadow transition">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <img src="{{ post.author.profile_picture.url|default:'/static/img/default-avatar.png' }}" 
+                                 class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" alt="">
+                            <div>
+                                <p class="fw-bold mb-0">{{ post.author.get_full_name|default:post.author.username }}</p>
+                                <small class="text-secondary">{{ post.created_at|timeuntil }} ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% if post.is_pinned %}
+                    <span class="badge bg-warning text-dark"><i class="fas fa-thumbtack me-1"></i>Pinned</span>
+                    {% endif %}
+                </div>
+
+                <a href="{% url 'community:post_detail' post.id %}" class="text-decoration-none">
+                    <h5 class="text-primary fw-bold mb-2">{{ post.title }}</h5>
+                </a>
+
+                <p class="text-secondary mb-3">{{ post.content|truncatewords:30 }}</p>
+
+                <div class="d-flex gap-3 align-items-center flex-wrap">
+                    <span class="badge bg-primary">{{ post.category.name }}</span>
+                    <span class="text-secondary small">
+                        <i class="fas fa-comment me-1"></i>{{ post.comment_count }} comments
+                    </span>
+                    <span class="text-secondary small">
+                        <i class="fas fa-eye me-1"></i>{{ post.views }} views
+                    </span>
+                    <span class="text-secondary small">
+                        <i class="fas fa-heart me-1"></i>{{ post.like_count }} likes
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-inbox text-muted mb-3" style="font-size: 50px;"></i>
+            <p class="text-secondary">No posts yet. Be the first to share!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+    <nav class="mt-5" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            {% for num in posts.paginator.page_range %}
+                {% if posts.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.transition {
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}College Announcements - Brainora{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <h1 class="text-gradient mb-2">College Announcements</h1>
+                <p class="text-secondary mb-0">Stay updated with official announcements from your college</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" class="row g-3">
+                    <div class="col-lg-8">
+                        <input type="text" name="q" class="form-control" placeholder="Search announcements..." value="{{ search_query }}">
+                    </div>
+                    <div class="col-lg-4">
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                            <option value="{{ category.slug }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Announcements List -->
+    <div class="row g-4">
+        {% for announcement in page_obj %}
+        <div class="col-12" data-aos="fade-up">
+            <div class="glass-panel p-4 border-light hover-shadow transition">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="flex-grow-1">
+                        {% if announcement.is_pinned %}
+                        <span class="badge bg-danger me-2"><i class="fas fa-thumbtack me-1"></i>Pinned</span>
+                        {% endif %}
+                        {% if announcement.category %}
+                        <span class="badge" style="background-color: {{ announcement.category.color }};">{{ announcement.category.name }}</span>
+                        {% endif %}
+                    </div>
+                    <small class="text-secondary">{{ announcement.published_at|date:"d M Y" }}</small>
+                </div>
+                
+                <h3 class="text-primary mb-2">{{ announcement.title }}</h3>
+                
+                {% if announcement.image %}
+                <img src="{{ announcement.image.url }}" class="img-fluid mb-3 rounded" alt="{{ announcement.title }}" style="max-height: 250px; object-fit: cover;">
+                {% endif %}
+                
+                <p class="text-secondary mb-3">{{ announcement.content|truncatewords:50 }}</p>
+                
+                <div class="row g-3 mb-3 text-secondary small">
+                    <div class="col-auto">
+                        <i class="fas fa-eye me-1"></i> {{ announcement.view_count }} views
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-heart me-1"></i> {{ announcement.like_count }} likes
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comment me-1"></i> {{ announcement.comment_count }} comments
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-sm-flex">
+                    <a href="{% url 'college:announcement_detail' announcement.id %}" class="btn btn-primary-custom btn-sm">
+                        <i class="fas fa-read me-1"></i>Read Full
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'college:announcement_like' announcement.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-heart me-1"></i>Like
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-inbox text-muted" style="font-size: 3rem;"></i>
+            <p class="text-secondary mt-3">No announcements available</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Previous</a>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&q={{ search_query }}{% endif %}">Last</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-shadow:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important; }
+.transition { transition: all 0.3s ease; }
+</style>
+{% endblock %}

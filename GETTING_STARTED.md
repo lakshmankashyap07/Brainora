@@ -89,11 +89,12 @@ python manage.py migrate
 ```
 
 ### 2. Populate Sample Data (Instructors, Courses, Notes, Announcements)
-Run the custom seed command to populate a rich set of study materials:
+Run the custom seed command to populate sample study materials:
 ```bash
-python manage.py seed_data
+python manage.py seed_data --force
 ```
-*Note: This command will automatically define a superuser for you: `admin` with password `adminpassword123`.*
+*Note: By default the command is DISABLED to avoid inserting demo/sample content into your database. Re-run with `--force` if you explicitly want the sample data (admin password: `adminpassword123`).*
+
 
 ### 3. Creating a Custom Superuser
 To create your own custom administrative credentials, run:

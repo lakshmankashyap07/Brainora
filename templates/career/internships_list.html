@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Internships & Jobs - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <div>
+                    <h1 class="text-gradient mb-2">Career Opportunities</h1>
+                    <p class="text-secondary mb-0">Explore internships and job opportunities from top companies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" role="tablist" data-aos="fade-up">
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'career:internships_list' %}">
+                <i class="fas fa-briefcase me-2"></i>Internships
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:jobs_list' %}">
+                <i class="fas fa-suitcase me-2"></i>Jobs
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:placement_papers' %}">
+                <i class="fas fa-file-alt me-2"></i>Placement Papers
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:companies_list' %}">
+                <i class="fas fa-building me-2"></i>Companies
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:coding_problems' %}">
+                <i class="fas fa-code me-2"></i>Coding
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:aptitude_categories' %}">
+                <i class="fas fa-brain me-2"></i>Aptitude
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'career:resume_list' %}">
+                <i class="fas fa-file-pdf me-2"></i>Resumes
+            </a>
+        </li>
+    </ul>
+
+    <!-- Search & Filter -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" class="row g-3">
+                    <div class="col-lg-6">
+                        <input type="text" name="q" class="form-control" placeholder="Search by company or role..." value="{{ search_query }}">
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" name="company" class="form-control" placeholder="Filter by company...">
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn btn-primary-custom w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internships Grid -->
+    <div class="row g-4">
+        {% for internship in internships %}
+        <div class="col-md-6 col-lg-4" data-aos="fade-up">
+            <div class="glass-panel p-4 h-100 border-light hover-shadow transition">
+                <div class="mb-3">
+                    <h5 class="text-primary fw-bold mb-1">{{ internship.title }}</h5>
+                    <p class="text-secondary mb-2">{{ internship.company }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <p class="small mb-2">
+                        <strong>Stipend:</strong> <span class="text-primary">{{ internship.stipend }}</span>
+                    </p>
+                    <p class="small mb-2">
+                        <strong>Duration:</strong> {{ internship.duration }}
+                    </p>
+                    {% if internship.location %}
+                    <p class="small mb-2">
+                        <strong>Location:</strong> {{ internship.location }}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="alert alert-info small mb-3">
+                    <strong>Deadline:</strong> {{ internship.deadline|date:"d M Y" }}
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a href="{{ internship.apply_link }}" target="_blank" class="btn btn-primary-custom btn-sm">
+                        <i class="fas fa-external-link-alt me-1"></i>Apply Now
+                    </a>
+                    <a href="{% url 'career:internship_detail' internship.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye me-1"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-inbox text-muted mb-3" style="font-size: 50px;"></i>
+            <p class="text-secondary">No internships available at the moment</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if internships.has_other_pages %}
+    <nav class="mt-5" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if internships.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ internships.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            {% for num in internships.paginator.page_range %}
+                {% if internships.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if internships.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ internships.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.transition {
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}
