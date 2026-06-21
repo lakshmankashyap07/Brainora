@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify 2FA - Brainora{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100 auth-bg-gradient py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5" data-aos="fade-up">
+            <div class="glass-panel p-5 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="bg-warning text-dark d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow-md" style="width: 60px; height: 60px;">
+                        <i class="fas fa-shield-alt fs-4"></i>
+                    </div>
+                    <h2 class="mb-1">Two-Factor Authentication</h2>
+                    <p class="text-secondary mb-1">Please enter the security token sent to:</p>
+                    <span class="fw-bold text-primary">{{ user_email }}</span>
+                </div>
+
+                <form method="POST" action="{% url 'authentication:verify_2fa' %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4 text-center">
+                        <label for="id_otp" class="form-label fw-semibold text-secondary mb-3">Security Code</label>
+                        {{ form.otp }}
+                        {% if form.otp.errors %}
+                            <div class="text-danger small mt-2">{{ form.otp.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3">Confirm Token</button>
+                </form>
+
+                <div class="text-center mt-4 pt-2 border-top border-light">
+                    <a href="{% url 'authentication:login' %}" class="small text-decoration-none fw-bold"><i class="fas fa-arrow-left me-1"></i> Back to Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

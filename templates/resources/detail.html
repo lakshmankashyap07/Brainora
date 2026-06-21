@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resource.title }} - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Navigation bar -->
+    <div class="mb-4" data-aos="fade-down">
+        <a href="{% url 'resources:list' %}" class="btn btn-sm btn-secondary-custom"><i class="fas fa-arrow-left me-1"></i> Back to Resources</a>
+    </div>
+
+    <!-- Main Detail Panel -->
+    <div class="row" data-aos="fade-up">
+        <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="glass-panel p-5 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-primary fs-6 py-2 px-3">{{ resource.category }}</span>
+                        <span class="text-secondary small"><i class="fas fa-calendar-alt me-1"></i> Shared on {{ resource.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    
+                    <h2 class="fw-bold text-gradient mb-3">{{ resource.title }}</h2>
+                    <hr class="border-light mb-4">
+                    
+                    <h5 class="fw-bold mb-2">Description</h5>
+                    <p class="text-secondary fs-5" style="line-height: 1.6;">
+                        {{ resource.description|default:"No description has been provided for this resource." }}
+                    </p>
+                </div>
+                
+                <div class="mt-5 pt-3 border-top border-light d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex gap-3">
+                        <!-- Like Toggle -->
+                        <a href="{% url 'resources:like' resource.id %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2">
+                            <i class="{% if has_liked %}fas fa-heart text-danger{% else %}far fa-heart{% endif %}"></i> 
+                            <span class="fw-bold">{{ resource.total_likes }} Likes</span>
+                        </a>
+
+                        <!-- Bookmark Toggle -->
+                        <a href="{% url 'resources:bookmark' resource.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2">
+                            <i class="{% if has_bookmarked %}fas fa-bookmark text-primary{% else %}far fa-bookmark{% endif %}"></i>
+                            <span class="fw-bold">{% if has_bookmarked %}Saved{% else %}Save{% endif %}</span>
+                        </a>
+                    </div>
+                    
+                    {% if resource.uploaded_by == user or user.role == 'Admin' %}
+                    <!-- Delete Button -->
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2" data-bs-toggle="modal" data-bs-target="#deleteResourceModal">
+                        <i class="fas fa-trash-alt me-1"></i> Delete Resource
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Metadata Sidebar -->
+        <div class="col-lg-4">
+            <div class="glass-panel p-4 mb-4">
+                <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-info-circle me-1"></i> File Info</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex justify-content-between align-items-center">
+                        <span class="text-secondary">Uploaded By</span>
+                        <span class="fw-bold text-primary">@{{ resource.uploaded_by.username }}</span>
+                    </li>
+                    <li class="mb-3 d-flex justify-content-between align-items-center">
+                        <span class="text-secondary">Download Count</span>
+                        <span class="badge bg-secondary fs-6">{{ resource.downloads }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <span class="text-secondary">Resource Medium</span>
+                        <span class="fw-bold text-primary">
+                            {% if resource.file %}
+                                File Attachment
+                            {% elif resource.external_link %}
+                                External URL
+                            {% else %}
+                                Unknown
+                            {% endif %}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="glass-panel p-4 text-center">
+                <h5 class="fw-bold mb-3 text-primary">Access Material</h5>
+                <p class="text-secondary small">Clicking below will record a download event and open the study resource.</p>
+                <div class="d-grid mt-4">
+                    <a href="{% url 'resources:download' resource.id %}" target="_blank" class="btn btn-primary-custom py-3"><i class="fas fa-download me-2"></i> Download / Access File</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if resource.uploaded_by == user or user.role == 'Admin' %}
+<!-- Delete Resource Confirmation Modal -->
+<div class="modal fade" id="deleteResourceModal" tabindex="-1" aria-labelledby="deleteResourceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border border-light shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="deleteResourceModalLabel">Confirm Resource Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="mb-0">Are you sure you want to delete this resource: <strong>"{{ resource.title }}"</strong>? This action is permanent and cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" action="{% url 'resources:delete' resource.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4 rounded-3 py-2 fw-semibold">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

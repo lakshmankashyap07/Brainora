@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Activities - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header panel -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <h2 class="mb-1 text-gradient"><i class="fas fa-calendar-alt me-2"></i> Campus Updates & Events</h2>
+                <p class="text-secondary mb-0">Follow real-time college notifications, exam deadlines, holidays, notices, and club events.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter and Search controls -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" action="{% url 'activities:list' %}" class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                            <input type="text" name="q" class="form-control border-start-0" placeholder="Search activities or location..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="type" class="form-select" onchange="this.form.submit()">
+                            <option value="">Update Type (All)</option>
+                            {% for type in activity_types %}
+                                <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-primary-custom">Filter / Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities list / timeline -->
+    <div class="row" data-aos="fade-up">
+        <div class="col-12">
+            <div class="d-flex flex-column gap-4">
+                {% if activities %}
+                    {% for activity in activities %}
+                    <div class="glass-panel p-4 d-flex flex-column flex-md-row gap-4 border-light align-items-md-center">
+                        {% if activity.image %}
+                            <img src="{{ activity.image.url }}" class="rounded-3 object-fit-cover shadow-sm" style="width: 100%; max-width: 160px; height: 120px;" alt="{{ activity.title }}">
+                        {% else %}
+                            <div class="bg-secondary bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center border border-light" style="width: 160px; height: 120px; min-width: 160px;">
+                                {% if activity.activity_type == 'Event' %}
+                                    <i class="fas fa-calendar-check text-primary fs-1"></i>
+                                {% elif activity.activity_type == 'Notice' %}
+                                    <i class="fas fa-exclamation-circle text-danger fs-1"></i>
+                                {% elif activity.activity_type == 'Holiday' %}
+                                    <i class="fas fa-umbrella-beach text-success fs-1"></i>
+                                {% elif activity.activity_type == 'Deadline' %}
+                                    <i class="fas fa-clock text-warning fs-1"></i>
+                                {% else %}
+                                    <i class="fas fa-bullhorn text-info fs-1"></i>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="badge 
+                                        {% if activity.activity_type == 'Event' %}bg-primary
+                                        {% elif activity.activity_type == 'Notice' %}bg-danger
+                                        {% elif activity.activity_type == 'Holiday' %}bg-success
+                                        {% elif activity.activity_type == 'Deadline' %}bg-warning text-dark
+                                        {% else %}bg-secondary{% endif %} mb-1">
+                                        {{ activity.activity_type }}
+                                    </span>
+                                    <h4 class="fw-bold mb-0 text-primary">{{ activity.title }}</h4>
+                                </div>
+                                <span class="text-muted small text-nowrap ms-2"><i class="far fa-clock me-1"></i> {{ activity.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            
+                            <p class="text-secondary mb-3">{{ activity.description }}</p>
+                            
+                            <div class="d-flex flex-wrap gap-4 text-secondary small pt-2 border-top border-light border-opacity-50">
+                                <span><i class="fas fa-calendar-day text-primary me-1"></i> <strong>Schedule:</strong> {{ activity.activity_date|date:"l, M d, Y" }}</span>
+                                {% if activity.location %}
+                                    <span><i class="fas fa-map-marker-alt text-primary me-1"></i> <strong>Venue / Location:</strong> {{ activity.location }}</span>
+                                {% endif %}
+                                <span class="ms-md-auto"><i class="fas fa-user-circle text-primary me-1"></i> posted by @{{ activity.created_by.username|default:"Admin" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="glass-panel p-5 text-center">
+                        <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 60px;"></i>
+                        <h4 class="text-secondary">No updates found</h4>
+                        <p class="text-muted">No campus announcements or upcoming deadlines meet your search criteria.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

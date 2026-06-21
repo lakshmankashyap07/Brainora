@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign Up - Brainora{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100 auth-bg-gradient py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-9 col-lg-8 col-xl-7" data-aos="fade-up">
+            <div class="glass-panel p-5 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow-md" style="width: 60px; height: 60px;">
+                        <i class="fas fa-user-plus fs-4"></i>
+                    </div>
+                    <h2 class="mb-1">Create an Account</h2>
+                    <p class="text-secondary">Join Brainora to access courses, syllabus files, and previous papers.</p>
+                </div>
+
+                <form method="POST" action="{% url 'authentication:signup' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_username" class="form-label fw-semibold">Username</label>
+                            <input type="text" name="username" class="form-control" id="id_username" required placeholder="Pick a username">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_email" class="form-label fw-semibold">Email Address</label>
+                            <input type="email" name="email" class="form-control" id="id_email" required placeholder="name@college.edu">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_full_name" class="form-label fw-semibold">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" id="id_full_name" required placeholder="Enter full name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_role" class="form-label fw-semibold">Role</label>
+                            <select name="role" class="form-select" id="id_role">
+                                <option value="Student">Student</option>
+                                <option value="Instructor">Instructor</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="id_college" class="form-label fw-semibold">College / Institute</label>
+                            <input type="text" name="college" class="form-control" id="id_college" placeholder="e.g. IIT, NIT">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_branch" class="form-label fw-semibold">Branch</label>
+                            <input type="text" name="branch" class="form-control" id="id_branch" placeholder="Computer Science">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_semester" class="form-label fw-semibold">Semester</label>
+                            <input type="number" name="semester" class="form-control" id="id_semester" min="1" max="8" value="1">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_password" class="form-label fw-semibold">Password</label>
+                            <input type="password" name="password" class="form-control" id="id_password" required placeholder="Minimum 8 characters">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_confirm_password" class="form-label fw-semibold">Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control" id="id_confirm_password" required placeholder="Verify password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3 mt-3">Register</button>
+                </form>
+
+                <div class="text-center mt-4 pt-2 border-top border-light">
+                    <p class="text-secondary mb-0">Already have an account? <a href="{% url 'authentication:login' %}" class="fw-bold text-decoration-none">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

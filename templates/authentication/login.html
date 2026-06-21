@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - Brainora{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100 auth-bg-gradient py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5" data-aos="fade-up">
+            <div class="glass-panel p-5 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow-md" style="width: 60px; height: 60px;">
+                        <i class="fas fa-lock fs-4"></i>
+                    </div>
+                    <h2 class="mb-1">Welcome Back</h2>
+                    <p class="text-secondary">Log in to access your dashboard and study resources.</p>
+                </div>
+
+                <form method="POST" action="{% url 'authentication:login' %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-semibold">Username or Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-user-circle"></i></span>
+                            <input type="text" name="username" class="form-control border-start-0" id="id_username" required placeholder="Enter username or email">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label for="id_password" class="form-label fw-semibold">Password</label>
+                            <a href="{% url 'authentication:forgot_password' %}" class="small text-decoration-none">Forgot Password?</a>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-key"></i></span>
+                            <input type="password" name="password" class="form-control border-start-0" id="id_password" required placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" name="remember_me" class="form-check-input" id="id_remember_me">
+                        <label class="form-check-label fw-semibold text-secondary" for="id_remember_me">Remember me on this device</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3 mt-2">Login</button>
+                </form>
+
+                <div class="text-center mt-4 pt-2 border-top border-light">
+                    <p class="text-secondary mb-0">Don't have an account? <a href="{% url 'authentication:signup' %}" class="fw-bold text-decoration-none">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.course_code }} - {{ course.title }} - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumbs/Back navigation -->
+    <div class="mb-4" data-aos="fade-down">
+        <a href="{% url 'courses:list' %}" class="btn btn-sm btn-secondary-custom"><i class="fas fa-arrow-left me-1"></i> Back to Courses</a>
+    </div>
+
+    <!-- Course Info Section -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+                    <div>
+                        <span class="badge bg-primary mb-2">Semester {{ course.semester }} • {{ course.credits }} Credits</span>
+                        <h1 class="text-gradient mb-1">{{ course.course_code }}</h1>
+                        <h2 class="fw-bold text-secondary mb-3">{{ course.title }}</h2>
+                        <p class="text-secondary mb-0 fs-5">{{ course.description|default:"No course description available." }}</p>
+                    </div>
+                    {% if course.instructor %}
+                    <div class="glass-panel p-3 border-light text-center align-self-md-center" style="min-width: 200px;">
+                        <i class="fas fa-chalkboard-teacher text-primary fs-3 mb-2"></i>
+                        <small class="text-muted d-block">Instructor</small>
+                        <span class="fw-bold text-primary">{{ course.instructor }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Syllabus materials tabs -->
+    <div class="row">
+        <!-- Exam papers column -->
+        <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+            <div class="glass-panel p-4 h-100">
+                <h4 class="fw-bold mb-4 text-gradient"><i class="fas fa-file-invoice me-2"></i> Previous Year Papers</h4>
+                
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% if papers %}
+                        {% for paper in papers %}
+                        <li class="list-group-item bg-transparent border-light px-0 py-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info text-dark mb-1">{{ paper.paper_type }}</span>
+                                <h6 class="fw-bold mb-1 text-primary">{{ paper.title }}</h6>
+                                <small class="text-secondary">Year: {{ paper.year }} • by @{{ paper.uploaded_by.username }}</small>
+                            </div>
+                            <a href="{{ paper.pdf_file.url }}" target="_blank" class="btn btn-sm btn-primary-custom rounded-pill px-3"><i class="fas fa-download me-1"></i> PDF</a>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item bg-transparent text-center py-5 text-secondary">
+                            <i class="fas fa-file-alt text-muted mb-2 fs-2 d-block"></i>
+                            No past papers uploaded for this course yet.
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Study resources column -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="glass-panel p-4 h-100">
+                <h4 class="fw-bold mb-4 text-gradient"><i class="fas fa-folder-open me-2"></i> Related Resources</h4>
+                
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% if related_resources %}
+                        {% for res in related_resources %}
+                        <li class="list-group-item bg-transparent border-light px-0 py-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-secondary mb-1">{{ res.category }}</span>
+                                <h6 class="fw-bold mb-1 text-primary">{{ res.title }}</h6>
+                                <small class="text-secondary">Uploaded by @{{ res.uploaded_by.username }}</small>
+                            </div>
+                            <a href="{% url 'resources:detail' res.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View</a>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item bg-transparent text-center py-5 text-secondary">
+                            <i class="fas fa-folder-open text-muted mb-2 fs-2 d-block"></i>
+                            No study resources uploaded for this course code yet.
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

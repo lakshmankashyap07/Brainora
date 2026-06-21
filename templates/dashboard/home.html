@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Panel -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h2 class="mb-1 text-gradient">Hello, {{ user.full_name|default:user.username }}!</h2>
+                    <p class="text-secondary mb-0">Welcome back to Brainora. Expand your academic records, find course notes, and check the campus activity log.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'resources:upload' %}" class="btn btn-primary-custom text-nowrap"><i class="fas fa-cloud-upload-alt me-1"></i> Upload Resource</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" action="{% url 'dashboard:home' %}">
+                    <div class="row g-2">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                                <input type="text" name="q" class="form-control border-start-0" placeholder="Search courses, resources, papers, activities..." value="{{ search_query }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-2">
+                            <select name="semester" class="form-select">
+                                <option value="">Semester (All)</option>
+                                {% for sem in semester_choices %}
+                                    <option value="{{ sem }}" {% if request.GET.semester == sem|stringformat:"i" %}selected{% endif %}>Semester {{ sem }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-lg-2">
+                            <select name="category" class="form-select">
+                                <option value="">Category (All)</option>
+                                {% for category in category_choices %}
+                                    <option value="{{ category }}" {% if request.GET.category == category %}selected{% endif %}>{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-2 d-grid">
+                            <button type="submit" class="btn btn-primary-custom">Filter / Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Section (if active) -->
+    {% if search_active %}
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="text-primary mb-0"><i class="fas fa-search-plus me-2 text-warning"></i> Search Results</h3>
+                    <a href="{% url 'dashboard:home' %}" class="btn btn-sm btn-secondary-custom">Clear Search</a>
+                </div>
+                
+                <!-- Courses Results -->
+                {% if search_courses %}
+                    <h5 class="fw-bold mt-4 mb-2 text-gradient">Matching Courses</h5>
+                    <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+                        {% for course in search_courses %}
+                        <div class="col">
+                            <div class="glass-panel p-3 h-100 d-flex justify-content-between align-items-center border-light">
+                                <div>
+                                    <span class="badge bg-secondary mb-1">Sem {{ course.semester }}</span>
+                                    <h6 class="fw-bold mb-1 text-primary">{{ course.course_code }} - {{ course.title }}</h6>
+                                </div>
+                                <a href="{% url 'courses:detail' course.id %}" class="btn btn-sm btn-primary-custom rounded-pill">View</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- Resources Results -->
+                {% if search_resources %}
+                    <h5 class="fw-bold mt-4 mb-2 text-gradient">Matching Resources</h5>
+                    <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+                        {% for resource in search_resources %}
+                        <div class="col">
+                            <div class="glass-panel p-3 h-100 d-flex justify-content-between align-items-center border-light">
+                                <div>
+                                    <span class="badge bg-primary mb-1">{{ resource.category }}</span>
+                                    <h6 class="fw-bold mb-1 text-primary">{{ resource.title }}</h6>
+                                </div>
+                                <a href="{% url 'resources:detail' resource.id %}" class="btn btn-sm btn-primary-custom rounded-pill">Open</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Papers Results -->
+                {% if search_papers %}
+                    <h5 class="fw-bold mt-4 mb-2 text-gradient">Previous Year Papers</h5>
+                    <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+                        {% for paper in search_papers %}
+                        <div class="col">
+                            <div class="glass-panel p-3 h-100 d-flex justify-content-between align-items-center border-light">
+                                <div>
+                                    <span class="badge bg-info text-dark mb-1">{{ paper.paper_type }} ({{ paper.year }})</span>
+                                    <h6 class="fw-bold mb-1 text-primary">{{ paper.course.course_code }} - {{ paper.title }}</h6>
+                                </div>
+                                <a href="{% url 'papers:list' %}" class="btn btn-sm btn-primary-custom rounded-pill">View List</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Activities Results -->
+                {% if search_activities %}
+                    <h5 class="fw-bold mt-4 mb-2 text-gradient">Campus Notices / Events</h5>
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        {% for activity in search_activities %}
+                        <div class="col">
+                            <div class="glass-panel p-3 h-100 d-flex justify-content-between align-items-center border-light">
+                                <div>
+                                    <span class="badge bg-warning text-dark mb-1">{{ activity.activity_type }}</span>
+                                    <h6 class="fw-bold mb-1 text-primary">{{ activity.title }}</h6>
+                                </div>
+                                <a href="{% url 'activities:list' %}" class="btn btn-sm btn-primary-custom rounded-pill">Check Details</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if not search_courses and not search_resources and not search_papers and not search_activities %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-search-minus text-muted mb-3" style="font-size: 50px;"></i>
+                        <p class="text-secondary mb-0">No matching records found. Try modifying your filters or query terms.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Stats Counters -->
+    <div class="row g-3 mb-4" data-aos="fade-up">
+        <div class="col-6 col-lg-3">
+            <div class="glass-panel p-3 text-center stats-card h-100 d-flex flex-column justify-content-center">
+                <i class="fas fa-graduation-cap text-primary fs-3 mb-2"></i>
+                <h4 class="mb-0 fw-extrabold text-primary">{{ courses_count }}</h4>
+                <small class="text-secondary fw-semibold">Total Courses</small>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="glass-panel p-3 text-center stats-card h-100 d-flex flex-column justify-content-center">
+                <i class="fas fa-folder-open text-success fs-3 mb-2"></i>
+                <h4 class="mb-0 fw-extrabold text-primary">{{ resources_count }}</h4>
+                <small class="text-secondary fw-semibold">Resources</small>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="glass-panel p-3 text-center stats-card h-100 d-flex flex-column justify-content-center">
+                <i class="fas fa-file-invoice text-info fs-3 mb-2"></i>
+                <h4 class="mb-0 fw-extrabold text-primary">{{ papers_count }}</h4>
+                <small class="text-secondary fw-semibold">Exam Papers</small>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="glass-panel p-3 text-center stats-card h-100 d-flex flex-column justify-content-center">
+                <i class="fas fa-bookmark text-danger fs-3 mb-2"></i>
+                <h4 class="mb-0 fw-extrabold text-primary">{{ bookmarks_count }}</h4>
+                <small class="text-secondary fw-semibold">Bookmarks</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphics Dashboard & Upcoming Card -->
+    <div class="row mb-4">
+        <!-- Chart.js widget -->
+        <div class="col-lg-8 mb-4 mb-lg-0" data-aos="fade-right">
+            <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between">
+                <div class="mb-3">
+                    <h5 class="fw-bold mb-1 text-primary">Uploads by Category</h5>
+                    <small class="text-secondary">Visual distribution of uploaded materials</small>
+                </div>
+                <div style="height: 250px; position: relative;">
+                    <canvas id="dashboard-category-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Activities Widget -->
+        <div class="col-lg-4" data-aos="fade-left">
+            <div class="glass-panel p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-calendar-check text-warning me-2"></i> Upcoming Activities</h5>
+                    <ul class="list-unstyled mb-0">
+                        {% if upcoming_activities %}
+                            {% for act in upcoming_activities %}
+                            <li class="mb-3 border-bottom border-light pb-2">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <span class="badge bg-warning text-dark small mb-1">{{ act.activity_type }}</span>
+                                        <h6 class="fw-bold mb-0 text-primary">{{ act.title }}</h6>
+                                        <small class="text-secondary">{{ act.activity_date|date:"l, M d" }}</small>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="text-center py-4 text-muted small">No upcoming events or deadlines.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <a href="{% url 'activities:list' %}" class="btn btn-sm btn-secondary-custom w-100 mt-2">View Activity Log</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Trending Notes -->
+        <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+            <div class="glass-panel p-4 h-100">
+                <h5 class="fw-bold mb-3 text-gradient"><i class="fas fa-fire me-2 text-danger"></i> Trending resources</h5>
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% if trending_resources %}
+                        {% for note in trending_resources %}
+                        <li class="list-group-item bg-transparent border-light px-0 py-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-primary mb-1">{{ note.category }}</span>
+                                <h6 class="fw-bold mb-1 text-primary">{{ note.title }}</h6>
+                                <small class="text-secondary">Uploader: @{{ note.uploaded_by.username }}</small>
+                            </div>
+                            <a href="{% url 'resources:detail' note.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View</a>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item bg-transparent text-center py-4 text-secondary">No trending resources listed yet.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Latest announcements -->
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="glass-panel p-4 h-100">
+                <h5 class="fw-bold mb-3 text-gradient"><i class="fas fa-bullhorn me-2 text-primary"></i> Campus Announcements</h5>
+                <ul class="list-group list-group-flush bg-transparent">
+                    {% if latest_announcements %}
+                        {% for notice in latest_announcements %}
+                        <li class="list-group-item bg-transparent border-light px-0 py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="badge bg-secondary mb-1">{{ notice.activity_type }}</span>
+                                    <h6 class="fw-bold mb-1 text-primary">{{ notice.title }}</h6>
+                                    <p class="text-secondary small mb-0">{{ notice.description|truncatewords:15 }}</p>
+                                </div>
+                                <small class="text-muted text-nowrap ms-2">{{ notice.created_at|timesince }} ago</small>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item bg-transparent text-center py-4 text-secondary">No campus announcements.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize Dashboard Chart.js
+    const labels = {{ chart_labels|safe }};
+    const dataValues = {{ chart_values|safe }};
+    initChart('dashboard-category-chart', labels, dataValues);
+</script>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Resources - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header banner -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <h2 class="mb-1 text-gradient"><i class="fas fa-folder-open me-2"></i> Learning Resources</h2>
+                    <p class="text-secondary mb-0">Browse student notes, assignments, lab guidelines, group links, and holiday homework shared by peers.</p>
+                </div>
+                <div>
+                    <a href="{% url 'resources:upload' %}" class="btn btn-primary-custom"><i class="fas fa-cloud-upload-alt me-1"></i> Upload File</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search, Filters, & Sorting Panel -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" action="{% url 'resources:list' %}" class="row g-3">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                            <input type="text" name="q" class="form-control border-start-0" placeholder="Search title or description..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <select name="category" class="form-select" onchange="this.form.submit()">
+                            <option value="">Category (All)</option>
+                            {% for cat in category_choices %}
+                                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <select name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="latest" {% if selected_sort == 'latest' %}selected{% endif %}>Sort by: Latest</option>
+                            <option value="likes" {% if selected_sort == 'likes' %}selected{% endif %}>Sort by: Most Liked</option>
+                            <option value="downloads" {% if selected_sort == 'downloads' %}selected{% endif %}>Sort by: Most Downloaded</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-grid">
+                        <button type="submit" class="btn btn-primary-custom"><i class="fas fa-filter"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Cards Grid -->
+    <div class="row g-4 mb-4" data-aos="fade-up">
+        {% if page_obj %}
+            {% for resource in page_obj %}
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-panel p-4 glass-panel-hover h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">{{ resource.category }}</span>
+                            <small class="text-secondary">{{ resource.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        <h5 class="fw-bold text-primary mb-2">{{ resource.title }}</h5>
+                        <p class="text-secondary small mb-3">{{ resource.description|truncatewords:22 }}</p>
+                    </div>
+
+                    <div class="pt-3 border-top border-light d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-3 text-secondary small">
+                            <span><i class="fas fa-heart text-danger me-1"></i> {{ resource.total_likes }}</span>
+                            <span><i class="fas fa-download text-primary me-1"></i> {{ resource.downloads }}</span>
+                        </div>
+                        <a href="{% url 'resources:detail' resource.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-folder-open text-muted mb-3" style="font-size: 60px;"></i>
+                <h4 class="text-secondary">No resources found</h4>
+                <p class="text-muted">No items matched your query. Click "Upload File" to share materials with the community.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination controls -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation" data-aos="fade-up">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link glass-panel py-2 px-3 me-2 border border-1 border-light text-primary" href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link glass-panel py-2 px-3 me-2 border border-1 border-light text-primary" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">Prev</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link btn-primary-custom py-2 px-3 me-2 rounded-3 border-0">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link glass-panel py-2 px-3 me-2 border border-1 border-light text-primary" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link glass-panel py-2 px-3 me-2 border border-1 border-light text-primary" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

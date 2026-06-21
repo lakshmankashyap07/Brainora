@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Settings Nav Sidebar -->
+        <div class="col-lg-4 mb-4" data-aos="fade-right">
+            <div class="glass-panel p-4">
+                <h4 class="mb-4 text-gradient"><i class="fas fa-sliders-h me-2"></i> settings</h4>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'authentication:edit_profile' %}" class="list-group-item list-group-item-action bg-transparent border-light py-3 d-flex align-items-center gap-3 text-primary">
+                        <i class="fas fa-user-cog text-primary"></i> Edit Profile details
+                    </a>
+                    <a href="#login-logs-section" class="list-group-item list-group-item-action bg-transparent border-light py-3 d-flex align-items-center gap-3 text-primary">
+                        <i class="fas fa-history text-primary"></i> Login History Logs
+                    </a>
+                    <button type="button" class="list-group-item list-group-item-action bg-transparent border-light py-3 d-flex align-items-center gap-3 text-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        <i class="fas fa-trash-alt text-danger"></i> Delete Brainora Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings details area -->
+        <div class="col-lg-8" data-aos="fade-left">
+            <!-- Account Security Card -->
+            <div class="glass-panel p-4 mb-4">
+                <h4 class="mb-3"><i class="fas fa-shield-alt text-success me-2"></i> Account Security & 2FA</h4>
+                <p class="text-secondary">Increase your account security by toggling Two-Factor Authentication. When active, logins will verify a code sent to your registered email address.</p>
+                <hr class="border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="fw-bold d-block text-primary">Two-Factor Authentication (2FA)</span>
+                        <small class="text-secondary">Current Status: 
+                            {% if user.two_factor_enabled %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inactive</span>
+                            {% endif %}
+                        </small>
+                    </div>
+                    <a href="{% url 'authentication:edit_profile' %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">Modify</a>
+                </div>
+            </div>
+
+            <!-- Login Logs Card -->
+            <div id="login-logs-section" class="glass-panel p-4">
+                <h4 class="mb-3"><i class="fas fa-history text-info me-2"></i> Login Logs (Recent Attempts)</h4>
+                <p class="text-secondary">Review recent access histories to verify that your account is safe from intruders.</p>
+                <div class="table-responsive mt-3">
+                    <table class="table align-middle text-primary">
+                        <thead>
+                            <tr class="text-secondary border-bottom border-light">
+                                <th>IP Address</th>
+                                <th>Date & Time</th>
+                                <th>Browser / OS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if login_logs %}
+                                {% for log in login_logs %}
+                                <tr class="border-bottom border-light">
+                                    <td class="fw-bold">{{ log.ip_address }}</td>
+                                    <td>{{ log.login_time|date:"M d, Y H:i" }}</td>
+                                    <td class="text-secondary small">{{ log.user_agent|truncatechars:40 }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center py-4 text-secondary">No login history recorded yet.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Confirmation Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border border-light shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-danger fs-1 mb-2"></i>
+                </div>
+                <p class="text-center mb-0">Are you absolutely sure you want to delete your account? This action is <strong>permanent</strong> and will delete all your uploads, bookmarks, and academic data. This cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" action="{% url 'authentication:delete_account' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4 rounded-3 py-2 fw-semibold">Yes, Delete Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

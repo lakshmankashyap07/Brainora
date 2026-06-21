@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Past Papers - Brainora{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header panel -->
+    <div class="row mb-4" data-aos="fade-down">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <h2 class="mb-1 text-gradient"><i class="fas fa-file-invoice me-2"></i> Previous Year Question Papers</h2>
+                <p class="text-secondary mb-0">Prepare for exams using final papers, midterm quizzes, and past assignments shared by instructors and students.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="row mb-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="glass-panel p-4">
+                <form method="GET" action="{% url 'papers:list' %}" class="row g-2 align-items-center">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                            <input type="text" name="q" class="form-control border-start-0" placeholder="Search by paper title or code..." value="{{ search_query }}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <select name="course" class="form-select" onchange="this.form.submit()">
+                            <option value="">Course (All)</option>
+                            {% for c in courses %}
+                                <option value="{{ c.id }}" {% if selected_course == c.id|stringformat:"i" %}selected{% endif %}>{{ c.course_code }} - {{ c.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <select name="type" class="form-select" onchange="this.form.submit()">
+                            <option value="">Paper Type (All)</option>
+                            {% for type in paper_types %}
+                                <option value="{{ type }}" {% if selected_type == type %}selected{% endif %}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <select name="year" class="form-select" onchange="this.form.submit()">
+                            <option value="">Year (All)</option>
+                            {% for yr in years %}
+                                <option value="{{ yr }}" {% if selected_year == yr|stringformat:"i" %}selected{% endif %}>{{ yr }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-1 d-grid">
+                        <button type="submit" class="btn btn-primary-custom"><i class="fas fa-filter"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Papers Grid / List -->
+    <div class="row g-4" data-aos="fade-up">
+        {% if papers %}
+            {% for paper in papers %}
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-panel p-4 glass-panel-hover h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-info text-dark">{{ paper.paper_type }}</span>
+                            <span class="badge bg-secondary">{{ paper.year }}</span>
+                        </div>
+                        
+                        <h5 class="fw-bold text-primary mb-1">{{ paper.course.course_code }}</h5>
+                        <h6 class="fw-bold text-secondary mb-3">{{ paper.title }}</h6>
+                        <p class="text-secondary small mb-3">Course: {{ paper.course.title }}</p>
+                    </div>
+                    
+                    <div class="pt-3 border-top border-light d-flex justify-content-between align-items-center">
+                        <span class="small text-muted">Uploaded by @{{ paper.uploaded_by.username }}</span>
+                        {% if paper.pdf_file %}
+                            <a href="{{ paper.pdf_file.url }}" target="_blank" class="btn btn-sm btn-primary-custom rounded-pill px-3"><i class="fas fa-download me-1"></i> Access PDF</a>
+                        {% else %}
+                            <span class="badge bg-warning text-dark small">No File</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-file-invoice text-muted mb-3" style="font-size: 60px;"></i>
+                <h4 class="text-secondary">No exam papers found</h4>
+                <p class="text-muted">No papers meet your search parameters or filter choices.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

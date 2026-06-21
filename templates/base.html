@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Brainora - Campus Learning Platform{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Loader -->
+    <div id="loader" class="loader-wrapper">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg glass-navbar fixed-top py-2">
+        <div class="container-fluid px-4">
+            <!-- Sidebar toggle for mobile -->
+            <button id="sidebar-toggle" class="btn text-primary d-lg-none me-2" type="button">
+                <i class="fas fa-bars fs-5"></i>
+            </button>
+            
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'dashboard:home' %}">
+                <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-3" style="width: 36px; height: 36px;">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <span class="brand-font fs-4 text-gradient">Brainora</span>
+            </a>
+            
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle-btn" class="btn theme-toggle-btn p-2" type="button">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                {% if user.is_authenticated %}
+                <!-- Notifications Link -->
+                <a href="{% url 'dashboard:notifications' %}" class="position-relative text-secondary p-2">
+                    <i class="fas fa-bell fs-5"></i>
+                    <!-- Notice Badge could go here -->
+                </a>
+
+                <!-- User Dropdown Menu -->
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center gap-2 text-decoration-none dropdown-toggle text-secondary" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" class="rounded-circle border border-primary border-2" style="width: 35px; height: 35px; object-fit: cover;" alt="profile">
+                        {% else %}
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <span class="d-none d-md-inline fw-semibold text-primary">{{ user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end glass-panel border border-1 border-light shadow-lg mt-2" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item py-2 fw-semibold" href="{% url 'authentication:profile' %}"><i class="fas fa-user-circle me-2"></i> My Profile</a></li>
+                        <li><a class="dropdown-item py-2 fw-semibold" href="{% url 'authentication:settings' %}"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2 fw-semibold text-danger" href="{% url 'authentication:logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="{% url 'authentication:login' %}" class="btn btn-secondary-custom btn-sm">Login</a>
+                <a href="{% url 'authentication:signup' %}" class="btn btn-primary-custom btn-sm">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid flex-grow-1">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            {% if user.is_authenticated %}
+            <aside id="sidebar" class="col-auto glass-sidebar d-flex flex-column">
+                <div class="flex-grow-1">
+                    <a href="{% url 'dashboard:home' %}" class="nav-link-custom {% if request.resolver_match.view_name == 'dashboard:home' %}active{% endif %}">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <a href="{% url 'courses:list' %}" class="nav-link-custom {% if 'courses' in request.path %}active{% endif %}">
+                        <i class="fas fa-graduation-cap"></i> Courses
+                    </a>
+                    <a href="{% url 'resources:list' %}" class="nav-link-custom {% if 'resources' in request.path and 'upload' not in request.path %}active{% endif %}">
+                        <i class="fas fa-folder-open"></i> Resources
+                    </a>
+                    <a href="{% url 'papers:list' %}" class="nav-link-custom {% if 'papers' in request.path %}active{% endif %}">
+                        <i class="fas fa-file-invoice"></i> Past Papers
+                    </a>
+                    <a href="{% url 'activities:list' %}" class="nav-link-custom {% if 'activities' in request.path %}active{% endif %}">
+                        <i class="fas fa-calendar-alt"></i> Activities
+                    </a>
+                    <a href="{% url 'resources:upload' %}" class="nav-link-custom {% if 'resources/upload' in request.path %}active{% endif %}">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Files
+                    </a>
+                    <a href="{% url 'authentication:settings' %}" class="nav-link-custom {% if 'settings' in request.path %}active{% endif %}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </div>
+                
+                <div class="p-3 border-top border-light mt-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" alt="profile">
+                        {% else %}
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <div style="line-height: 1.1;">
+                            <small class="text-secondary d-block">{{ user.role }}</small>
+                            <span class="fw-bold d-block text-primary" style="font-size: 0.9rem;">{{ user.full_name|default:user.username }}</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            {% endif %}
+
+            <!-- Main Page Content -->
+            <main class="{% if user.is_authenticated %}main-content-wrapper{% else %}col-12 py-5 mt-5{% endif %} flex-grow-1">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container">
+        <!-- Floating toasts inject here -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast custom-toast show mb-2 django-alert" role="alert" style="transition: opacity 0.5s;">
+                    <div class="toast-body d-flex align-items-center justify-content-between p-3">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle text-success fs-5"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle text-warning fs-5"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fas fa-times-circle text-danger fs-5"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle text-info fs-5"></i>
+                            {% endif %}
+                            <span class="fw-semibold">{{ message }}</span>
+                        </div>
+                        <button type="button" class="btn-close" onclick="this.parentElement.parentElement.remove()" aria-label="Close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Javascript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Core Application Script -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <script>
+        // Init Animate On Scroll (AOS)
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found - Brainora{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100 py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-7 col-lg-6 text-center" data-aos="zoom-in">
+            <div class="glass-panel p-5 shadow-lg">
+                <div class="display-1 text-gradient fw-extrabold mb-3">404</div>
+                <h3 class="fw-bold mb-3 text-primary">Syllabus Out of Bounds</h3>
+                <p class="text-secondary fs-5 mb-4">The page you are looking for has either been moved, deleted, or was never part of our study registry.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'dashboard:home' %}" class="btn btn-primary-custom px-4 py-3"><i class="fas fa-home me-2"></i> Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
